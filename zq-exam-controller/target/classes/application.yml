@@ -1,0 +1,31 @@
+server:
+    port: 7481
+    contextPath: /zj
+
+## 打印sql
+logging:
+    level:
+        cn.kousi.manager.dao.mapper: debug
+        io.swagger.models.parameters.AbstractSerializableParameter: info
+    config: classpath:logging-spring.xml
+
+#选择环境配置
+spring:
+    profiles:
+        active: dev
+    http:
+      multipart:
+        max-file-size: 100Mb
+        max-request-size: 100Mb
+      encoding:
+        force: true
+
+
+#数据库下划线字段转实体类属性驼峰命名
+mybatis:
+  configuration:
+    map-underscore-to-camel-case: true
+  mapper-locations: classpath*:/mapper/*.xml
+  type-aliases-package: cn.zq.zxam.domain
+
+
