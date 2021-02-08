@@ -1,8 +1,11 @@
 package cn.exam.config;
 
 
+import cn.exam.service.UserInfoService;
 import cn.exam.util.LoginErrorException;
 import cn.exam.util.SystemCode;
+import cn.exam.vo.MenuInfoVO;
+import cn.exam.vo.UserVO;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.shiro.authc.AuthenticationException;
@@ -22,8 +25,8 @@ public class MyShiroRealm extends AuthorizingRealm {
 	protected static final Log log = LogFactory.getLog(MyShiroRealm.class);
 	@Autowired
 	private UserUtil userUtil;
-//	@Autowired
-//	private TblUserService userInfoService;
+	@Autowired
+	private UserInfoService userInfoService;
 	/**
 	 * 校验权限时调用
 	 * @param principals 密钥
@@ -31,13 +34,13 @@ public class MyShiroRealm extends AuthorizingRealm {
 	@Override
 	protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
 		SimpleAuthorizationInfo authorizationInfo = new SimpleAuthorizationInfo();
-//		List<MenuInfoVO> permission = userUtil.getPermission();
-//		if (null == permission){
-//			return authorizationInfo;
-//		}
-//		for (MenuInfoVO menuInfo:permission){
-//			authorizationInfo.addStringPermission(menuInfo.getMenuIndex());
-//		}
+		List<MenuInfoVO> permission = userUtil.getPermission();
+		if (null == permission){
+			return authorizationInfo;
+		}
+		for (MenuInfoVO menuInfo:permission){
+			authorizationInfo.addStringPermission(menuInfo.getMenuIndex());
+		}
 		return authorizationInfo;
 	}
 
@@ -51,17 +54,16 @@ public class MyShiroRealm extends AuthorizingRealm {
 			throws AuthenticationException {
 		//获取用户的输入的账号.
 		String userId = (String)token.getPrincipal();
-//		User shiroUserInfoVO = userInfoService.queryUserInfoByName(userId);
+		UserVO shiroUserInfoVO = userInfoService.queryUserInfoByName(userId);
 		//shiro验证账号
-//		if (shiroUserInfoVO==null){
-//			throw new LoginErrorException(SystemCode.USER_LOGIN_ERROR_CODE,SystemCode.USER_LOGIN_ERROR_MSG);
-//		}
-//		return new SimpleAuthenticationInfo(
-//				shiroUserInfoVO,
-//				shiroUserInfoVO
-//						.getPwd(),
-//				getName()
-//		);
-		return null;
+		if (shiroUserInfoVO==null){
+			throw new LoginErrorException(SystemCode.USER_LOGIN_ERROR_CODE,SystemCode.USER_LOGIN_ERROR_MSG);
+		}
+		return new SimpleAuthenticationInfo(
+				shiroUserInfoVO,
+				shiroUserInfoVO
+						.getPassword(),
+				getName()
+		);
 	}
 }

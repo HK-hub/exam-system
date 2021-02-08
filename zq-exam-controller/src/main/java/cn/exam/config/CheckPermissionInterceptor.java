@@ -1,6 +1,9 @@
 package cn.exam.config;
 
 
+import cn.exam.RequiredPermission;
+import cn.exam.domain.zj.ZjUserInfo;
+import cn.exam.redis.RedisKeyEnum;
 import cn.exam.util.Constant;
 import cn.exam.util.ExpressException;
 import cn.exam.util.LoginErrorException;
@@ -35,34 +38,28 @@ public class CheckPermissionInterceptor extends HandlerInterceptorAdapter {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
-//        String requestURI = request.getRequestURI();
-//        HandlerMethod handlerMethod = (HandlerMethod) handler;
-//        RequiredPermission permissionAnno = handlerMethod.getMethodAnnotation(RequiredPermission.class);
-//        String[] exceptUrlArray = exceptUrl.split(";");
-//        for(String url : exceptUrlArray){
-//            if (requestURI.contains(url)) {
-//                //没有贴@RequiredPermission注解,可以直接放行通过
-//                return true;
-//            }
-//        }
-//        if (permissionAnno == null) {
-//                updateRedisKeyTime();
-//                return true;
-//        }else {
-//            //有贴@RequiredPermission注解,需要校验当前用户是否有权限
-//            String handlerName = handlerMethod.getBeanType().getName();
-//            String methodName = handlerMethod.getMethod().getName();
-//            String btnExpression = handlerName + ":" + methodName;
-//            System.out.println(btnExpression);
-//            User user = userUtil.getUser();
-//            //查询该用户下的所有角色的所有菜单下的所有按钮
-//            Map<String, String> btnCacheMap = userService.queryBtnInfoList(user.getUserId());
-//            if (btnCacheMap.containsKey(btnExpression)) {
-//                return true;
-//            }
-//        }
-//        String btnName = permissionAnno.name();
-//        sendJsonError(SystemCode.USER_HAVE_NO_PERMISSION, "您没有操作权限:" + btnName, response);
+        String requestURI = request.getRequestURI();
+        HandlerMethod handlerMethod = (HandlerMethod) handler;
+        RequiredPermission permissionAnno = handlerMethod.getMethodAnnotation(RequiredPermission.class);
+        String[] exceptUrlArray = exceptUrl.split(";");
+        for(String url : exceptUrlArray){
+            if (requestURI.contains(url)) {
+                //没有贴@RequiredPermission注解,可以直接放行通过
+                return true;
+            }
+        }
+        if (permissionAnno == null) {
+                updateRedisKeyTime();
+                return true;
+        }else {
+            //有贴@RequiredPermission注解,需要校验当前用户是否有权限
+            String handlerName = handlerMethod.getBeanType().getName();
+            String methodName = handlerMethod.getMethod().getName();
+            String btnExpression = handlerName + ":" + methodName;
+            System.out.println(btnExpression);
+        }
+        String btnName = permissionAnno.name();
+        sendJsonError(SystemCode.USER_HAVE_NO_PERMISSION, "您没有操作权限:" + btnName, response);
         return false;
     }
 
@@ -73,24 +70,24 @@ public class CheckPermissionInterceptor extends HandlerInterceptorAdapter {
         sendJson(map, response);
     }
 
-//    private void updateRedisKeyTime() {
-//        try {
-//            User user1 = (User) SecurityUtils.getSubject().getPrincipal();
-//            if (ObjectUtils.isEmpty(user1)){
-//                throw new ExpressException(SystemCode.SYSTEM_AGAIN_CODE,"权限失效");
-//            }
-//            User user = userUtil.getUser();
-//            if (user != null) {
-//                String token = user.getToken();
-//                String userAndMenuInfo = redisUtil.getKey(RedisKeyEnum.USER.getCode() + ":" + token);
-//                if (userAndMenuInfo != null) {
-//                    redisUtil.setKeyTime(RedisKeyEnum.USER.getCode() + ":" + token, userAndMenuInfo, Constant.KEY_IN_REDIS_TIME);
-//                }
-//            }
-//        } catch (LoginErrorException e) {
-//            throw new ExpressException(SystemCode.USER_LOGIN_ERROR_CODE,"权限失效"+e.toString());
-//        }
-//    }
+    private void updateRedisKeyTime() {
+        try {
+            ZjUserInfo user1 = (ZjUserInfo) SecurityUtils.getSubject().getPrincipal();
+            if (ObjectUtils.isEmpty(user1)){
+                throw new ExpressException(SystemCode.SYSTEM_AGAIN_CODE,"权限失效");
+            }
+            ZjUserInfo user = userUtil.getUser();
+            if (user != null) {
+                String token = user.getToken();
+                String userAndMenuInfo = redisUtil.getKey(RedisKeyEnum.USER.getCode() + ":" + token);
+                if (userAndMenuInfo != null) {
+                    redisUtil.setKeyTime(RedisKeyEnum.USER.getCode() + ":" + token, userAndMenuInfo, Constant.KEY_IN_REDIS_TIME);
+                }
+            }
+        } catch (LoginErrorException e) {
+            throw new ExpressException(SystemCode.USER_LOGIN_ERROR_CODE,"权限失效"+e.toString());
+        }
+    }
 
     private void sendJson(Object obj, HttpServletResponse response) {
         try {

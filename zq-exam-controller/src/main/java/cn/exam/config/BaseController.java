@@ -1,5 +1,6 @@
 package cn.exam.config;
 
+import cn.exam.domain.zj.ZjUserInfo;
 import cn.exam.util.PageResult;
 import cn.exam.util.ResultDTO;
 import cn.exam.util.SystemCode;
@@ -130,8 +131,8 @@ public class BaseController {
 		sendJson(map, response);
 	}
 
-//    protected User getCurrentUserInfo(){
-//		return userUtil.getUser();
-//	}
+    protected ZjUserInfo getCurrentUserInfo(){
+		return userUtil.getUser();
+	}
 
 }
