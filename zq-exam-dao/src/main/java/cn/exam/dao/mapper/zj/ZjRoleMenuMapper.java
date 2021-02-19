@@ -8,7 +8,11 @@
 package cn.exam.dao.mapper.zj;
 
 import cn.exam.dao.mapper.base.CommonBaseMapper;
-import cn.zq.exam.domain.zj.ZjRoleMenu;
+import cn.exam.vo.MenuInfoVO;
+import cn.exam.domain.zj.ZjRoleMenu;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 
 /**
@@ -19,4 +23,11 @@ import cn.zq.exam.domain.zj.ZjRoleMenu;
  */
 public interface ZjRoleMenuMapper
         extends CommonBaseMapper<ZjRoleMenu> {
+
+    List<MenuInfoVO> queryMenuList(@Param("roleIdList") List<String> roleIdList);
+
+
+
+    List<ZjRoleMenu> queryRoleMenuInfoByRoleId(String roleId);
+
 }

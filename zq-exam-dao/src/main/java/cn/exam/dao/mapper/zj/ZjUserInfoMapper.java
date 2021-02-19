@@ -27,8 +27,7 @@ import java.util.List;
  */
 public interface ZjUserInfoMapper extends CommonBaseMapper<ZjUserInfo> {
 //    @Select("select  user_id userId,password,user_name userName from zj_user_info where user_id =#{userId} and is_delete=0")
-//    UserVO queryShiroUserInfoByUserName(@Param("userId") String userId);
-    UserVO queryShiroUserInfoByUserName();
+    UserVO queryShiroUserInfoByUserName(@Param("userId") String userId);
 
     /**
      * userId查询权限

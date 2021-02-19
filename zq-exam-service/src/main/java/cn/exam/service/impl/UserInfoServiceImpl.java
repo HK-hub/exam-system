@@ -23,14 +23,9 @@ public class UserInfoServiceImpl implements UserInfoService {
 
     @Override
     public UserVO queryUserInfoByName(String userId) {
-//        UserVO user = userMapper.queryShiroUserInfoByUserName(userId);
-
-        UserVO user = userMapper.queryShiroUserInfoByUserName();
-
-//        List<UserRoleVO> roleBean = userMapper.queryUserRoleByUserId(userId);
-//        user.setRole(roleBean);
-//        return user;
-
-        return  null;
+        UserVO user = userMapper.queryShiroUserInfoByUserName(userId);
+        List<UserRoleVO> roleBean = userMapper.queryUserRoleByUserId(userId);
+        user.setRole(roleBean);
+        return user;
     }
 }

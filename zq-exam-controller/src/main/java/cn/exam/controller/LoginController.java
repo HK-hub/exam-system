@@ -6,6 +6,7 @@ import cn.exam.dao.mapper.zj.ZjUserInfoMapper;
 import cn.exam.domain.zj.ZjUserInfo;
 import cn.exam.redis.RedisKeyEnum;
 import cn.exam.service.UserInfoService;
+import cn.exam.service.ZjRoleMenuService;
 import cn.exam.util.*;
 import cn.exam.vo.MenuInfoVO;
 import cn.exam.vo.UserVO;
@@ -43,6 +44,8 @@ public class LoginController extends BaseController {
     private ZjUserInfoMapper userInfoMapper;
     @Autowired
     private RedisUtil redisUtil;
+    @Autowired
+    private ZjRoleMenuService roleMenuService;
     /**
      * 登录
      */
@@ -102,13 +105,13 @@ public class LoginController extends BaseController {
             roleIdList.add(roleId1.toString());
         }
         ResultDTO<List<MenuInfoVO>> resultDTO = new ResultDTO<>();
-//        List<MenuInfoVO> menuVOS = roleMenuService.queryMenuList(roleIdList);
-//        ArrayList<MenuInfoVO> infos2 =
-//                menuVOS.stream()
-//                        .collect(Collectors.collectingAndThen(Collectors
-//                                .toCollection(() -> new TreeSet<>(Comparator
-//                                        .comparing(MenuInfoVO::getMenuId))), ArrayList::new));
-//        resultDTO.setResult(infos2);
+        List<MenuInfoVO> menuVOS = roleMenuService.queryMenuList(roleIdList);
+        ArrayList<MenuInfoVO> infos2 =
+                menuVOS.stream()
+                        .collect(Collectors.collectingAndThen(Collectors
+                                .toCollection(() -> new TreeSet<>(Comparator
+                                        .comparing(MenuInfoVO::getMenuId))), ArrayList::new));
+        resultDTO.setResult(infos2);
         resultDTO.buildReturnCode(SystemCode.RET_CODE_SUCC,SystemCode.RET_MSG_SUCC);
         sendJson(resultDTO,response);
     }
