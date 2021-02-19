@@ -26,15 +26,16 @@ import java.util.List;
  * @Description:
  */
 public interface ZjUserInfoMapper extends CommonBaseMapper<ZjUserInfo> {
-    @Select("select  user_id,password,user_name from zj_user_info where user_id =#{userId} and is_delete=0")
-    UserVO queryShiroUserInfoByUserName(@Param("userId") String userId);
-
+//    @Select("select  user_id userId,password,user_name userName from zj_user_info where user_id =#{userId} and is_delete=0")
+//    UserVO queryShiroUserInfoByUserName(@Param("userId") String userId);
+    UserVO queryShiroUserInfoByUserName();
 
     /**
      * userId查询权限
      * @param userId 用户id
+     *
      */
-    @Select("SELECT   a.user_id ,a.role_id ,b.role_name FROM zj_user_role a LEFT JOIN zj_role b ON a.role_id = b.role_id WHERE a.user_id=#{userId}")
+    @Select("SELECT   a.user_id userId,a.role_id roleId,b.role_name  roleName FROM zj_user_role a LEFT JOIN zj_role b ON a.role_id = b.role_id WHERE a.user_id=#{userId}")
     List<UserRoleVO> queryUserRoleByUserId(@Param("userId")String userId);
 
 

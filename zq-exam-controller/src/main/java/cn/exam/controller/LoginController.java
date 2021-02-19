@@ -7,9 +7,12 @@ import cn.exam.domain.zj.ZjUserInfo;
 import cn.exam.redis.RedisKeyEnum;
 import cn.exam.service.UserInfoService;
 import cn.exam.util.*;
+import cn.exam.vo.MenuInfoVO;
 import cn.exam.vo.UserVO;
 import cn.zq.exam.so.UserInfoSO;
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.LockedAccountException;
@@ -22,7 +25,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.servlet.http.HttpServletResponse;
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author YS
@@ -44,20 +48,22 @@ public class LoginController extends BaseController {
      */
     @RequestMapping("login.htm")
     public void login(ZjUserInfo userInfo, HttpServletResponse response){
-        ResultDTO<ZjUserInfo> resultDTO = new ResultDTO<>();
+        ResultDTO<UserVO> resultDTO = new ResultDTO<>();
         //注册shiro
         UserVO tblUser = userInfoService.queryUserInfoByName(userInfo.getUserId());
         if (ObjectUtils.isEmpty(tblUser)){
             throw new ExpressException(SystemCode.SERVICE_FAILD_CODE,"账号输入有误");
         }
-        if (!MD5Utils.md5(userInfo.getPassword()).equals(tblUser.getPassword())){
+        String s = MD5Utils.md5(userInfo.getPassword());
+        if (!s.equals(tblUser.getPassword())){
             throw new ExpressException(SystemCode.SERVICE_FAILD_CODE,"密码错误");
         }
         UsernamePasswordToken shiroToken = new UsernamePasswordToken(userInfo.getUserId(), MD5Utils.md5(userInfo.getPassword()));
         Subject currentUser = SecurityUtils.getSubject();
         currentUser.login(shiroToken);
         //获取用户信息
-        ZjUserInfo user1 = (ZjUserInfo) SecurityUtils.getSubject().getPrincipal();
+        Object principal = SecurityUtils.getSubject().getPrincipal();
+        UserVO user1 = (UserVO) principal;
         try {
             resultDTO.setDescription(SystemCode.RET_MSG_SUCC);
             String token = UUID.randomUUID().toString();
@@ -81,7 +87,31 @@ public class LoginController extends BaseController {
         }
         sendJsonResult(resultDTO, response);
     }
-
+    /**
+     * 角色菜单查询
+     * @param roleId 角色id
+     * @param response 响应体
+     */
+    @RequestMapping("queryMenuList.htm")
+    public void queryMenuList(String roleId, HttpServletResponse response){
+        JSONArray array = JSON.parseArray(roleId);
+        List<String> roleIdList = new ArrayList<>();
+        for (Object json : array){
+            JSONObject jsonObject = JSON.parseObject(json.toString());
+            Object roleId1 = jsonObject.get("roleId");
+            roleIdList.add(roleId1.toString());
+        }
+        ResultDTO<List<MenuInfoVO>> resultDTO = new ResultDTO<>();
+//        List<MenuInfoVO> menuVOS = roleMenuService.queryMenuList(roleIdList);
+//        ArrayList<MenuInfoVO> infos2 =
+//                menuVOS.stream()
+//                        .collect(Collectors.collectingAndThen(Collectors
+//                                .toCollection(() -> new TreeSet<>(Comparator
+//                                        .comparing(MenuInfoVO::getMenuId))), ArrayList::new));
+//        resultDTO.setResult(infos2);
+        resultDTO.buildReturnCode(SystemCode.RET_CODE_SUCC,SystemCode.RET_MSG_SUCC);
+        sendJson(resultDTO,response);
+    }
 
     /**
      * 退出
