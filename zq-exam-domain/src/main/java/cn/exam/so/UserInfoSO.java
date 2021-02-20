@@ -14,10 +14,9 @@ public class UserInfoSO {
      */
     private String userId;
 
-    /**
-     * 班级id
-     */
-    private Integer classId;
+
+
+    private String typeId;
 
     /**
      * 密码
@@ -25,6 +24,8 @@ public class UserInfoSO {
     private String password;
 
     private String userName;
+
+    private String confirmPassword;
 
 
 

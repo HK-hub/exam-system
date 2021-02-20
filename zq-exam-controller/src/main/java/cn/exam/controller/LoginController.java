@@ -46,6 +46,7 @@ public class LoginController extends BaseController {
     private RedisUtil redisUtil;
     @Autowired
     private ZjRoleMenuService roleMenuService;
+
     /**
      * 登录
      */
@@ -136,32 +137,33 @@ public class LoginController extends BaseController {
         if (ObjectUtils.isEmpty(so.getUserId())||ObjectUtils.isEmpty(so.getPassword())||ObjectUtils.isEmpty(so.getUserName())){
             throw new ExpressException( SystemCode.SERVICE_FAILD_CODE,"必填字段不能为空");
         }
-        UserVO tblUser = userInfoService.queryUserInfoByName(so.getUserId());
-        if (!ObjectUtils.isEmpty(tblUser)){
+        if (!so.getPassword().equals(so.getConfirmPassword())){
+            throw new ExpressException( SystemCode.SERVICE_FAILD_CODE,"密码不一致");
+        }
+        UserVO user = userInfoMapper.queryShiroUserInfoByUserName(so.getUserId());
+        if (!ObjectUtils.isEmpty(user)){
             throw new ExpressException(SystemCode.SERVICE_FAILD_CODE,"账号已存在，请勿重复注册");
         }
         ZjUserInfo userInfo = new ZjUserInfo();
-        if (so.getClassId()!=null){
-            userInfo.setClassId(so.getClassId());
-        }
         String currentTime = DateUtils.getCurrentTime();
         userInfo.setUserId(so.getUserId());
         userInfo.setUserName(so.getUserName());
+        userInfo.setTypeId(Integer.valueOf(so.getTypeId()));
         userInfo.setPassword(MD5Utils.md5(so.getPassword()));
         userInfo.setCreateTime(currentTime);
         userInfo.setUpdateTime(currentTime);
-        userInfoMapper.insert(userInfo);
+        userInfoMapper.insertSelective(userInfo);
 
-        UsernamePasswordToken shiroToken = new UsernamePasswordToken(so.getUserId(), MD5Utils.md5(so.getPassword()));
-        Subject currentUser = SecurityUtils.getSubject();
-        currentUser.login(shiroToken);
+//        UsernamePasswordToken shiroToken = new UsernamePasswordToken(so.getUserId(), MD5Utils.md5(so.getPassword()));
+//        Subject currentUser = SecurityUtils.getSubject();
+//        currentUser.login(shiroToken);
         //获取用户信息
-        ZjUserInfo user1 = (ZjUserInfo) SecurityUtils.getSubject().getPrincipal();
+//        ZjUserInfo user1 = (ZjUserInfo) SecurityUtils.getSubject().getPrincipal();
         resultDTO.setDescription(SystemCode.RET_MSG_SUCC);
-        String token = UUID.randomUUID().toString();
-        user1.setToken(token);
+//        String token = UUID.randomUUID().toString();
+//        user1.setToken(token);
         resultDTO.setCode(SystemCode.RET_CODE_SUCC);
-        resultDTO.setResult(user1);
+//        resultDTO.setResult(user1);
         sendJsonSuccess(resultDTO,response);
     }
 }

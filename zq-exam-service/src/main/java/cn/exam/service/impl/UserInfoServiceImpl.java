@@ -7,6 +7,7 @@ import cn.exam.dao.mapper.zj.ZjUserInfoMapper;
 import cn.exam.vo.UserVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 
 import java.util.List;
 
@@ -25,7 +26,9 @@ public class UserInfoServiceImpl implements UserInfoService {
     public UserVO queryUserInfoByName(String userId) {
         UserVO user = userMapper.queryShiroUserInfoByUserName(userId);
         List<UserRoleVO> roleBean = userMapper.queryUserRoleByUserId(userId);
-        user.setRole(roleBean);
+        if (!ObjectUtils.isEmpty(roleBean)){
+            user.setRole(roleBean);
+        }
         return user;
     }
 }

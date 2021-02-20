@@ -48,8 +48,8 @@ public class ZjUserInfo  {
      */
     @Column(name ="update_time")
     private String updateTime;
-    @Column(name ="class_id")
-    private Integer classId;
+    @Column(name ="type_id")
+    private Integer typeId;
 
     private String token;
     private List<UserRoleVO> role;
