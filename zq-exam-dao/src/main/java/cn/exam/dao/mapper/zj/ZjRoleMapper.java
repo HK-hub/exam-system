@@ -8,7 +8,10 @@
 package cn.exam.dao.mapper.zj;
 
 import cn.exam.dao.mapper.base.CommonBaseMapper;
-import cn.zq.exam.domain.zj.ZjRole;
+import cn.exam.query.RoleQuery;
+import cn.exam.domain.zj.ZjRole;
+
+import java.util.List;
 
 
 /**
@@ -19,4 +22,7 @@ import cn.zq.exam.domain.zj.ZjRole;
  */
 public interface ZjRoleMapper
         extends CommonBaseMapper<ZjRole> {
+    List<ZjRole> queryPage(RoleQuery query);
+
+
 }

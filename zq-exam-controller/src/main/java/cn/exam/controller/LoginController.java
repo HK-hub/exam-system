@@ -4,6 +4,7 @@ import cn.exam.config.BaseController;
 import cn.exam.config.RedisUtil;
 import cn.exam.dao.mapper.zj.ZjUserInfoMapper;
 import cn.exam.domain.zj.ZjUserInfo;
+import cn.exam.query.UserQuery;
 import cn.exam.redis.RedisKeyEnum;
 import cn.exam.service.UserInfoService;
 import cn.exam.service.ZjRoleMenuService;
@@ -51,16 +52,16 @@ public class LoginController extends BaseController {
      * 登录
      */
     @RequestMapping("login.htm")
-    public void login(ZjUserInfo userInfo, HttpServletResponse response){
+    public void login(ZjUserInfo userInfo, HttpServletResponse response) {
         ResultDTO<UserVO> resultDTO = new ResultDTO<>();
         //注册shiro
         UserVO tblUser = userInfoService.queryUserInfoByName(userInfo.getUserId());
-        if (ObjectUtils.isEmpty(tblUser)){
-            throw new ExpressException(SystemCode.SERVICE_FAILD_CODE,"账号输入有误");
+        if (ObjectUtils.isEmpty(tblUser)) {
+            throw new ExpressException(SystemCode.SERVICE_FAILD_CODE, "账号输入有误");
         }
         String s = MD5Utils.md5(userInfo.getPassword());
-        if (!s.equals(tblUser.getPassword())){
-            throw new ExpressException(SystemCode.SERVICE_FAILD_CODE,"密码错误");
+        if (!s.equals(tblUser.getPassword())) {
+            throw new ExpressException(SystemCode.SERVICE_FAILD_CODE, "密码错误");
         }
         UsernamePasswordToken shiroToken = new UsernamePasswordToken(userInfo.getUserId(), MD5Utils.md5(userInfo.getPassword()));
         Subject currentUser = SecurityUtils.getSubject();
@@ -74,7 +75,7 @@ public class LoginController extends BaseController {
             user1.setToken(token);
             resultDTO.setCode(SystemCode.RET_CODE_SUCC);
             resultDTO.setResult(user1);
-            redisUtil.setKeyTime(RedisKeyEnum.USER.getCode()+":" + token, JSON.toJSONString(user1), Constant.KEY_IN_REDIS_TIME);
+            redisUtil.setKeyTime(RedisKeyEnum.USER.getCode() + ":" + token, JSON.toJSONString(user1), Constant.KEY_IN_REDIS_TIME);
 
         } catch (IncorrectCredentialsException e) {
             resultDTO.setCode(SystemCode.USER_LOGIN_ERROR_CODE);
@@ -82,45 +83,48 @@ public class LoginController extends BaseController {
         } catch (LockedAccountException e) {
             resultDTO.setCode(SystemCode.USER_LOGIN_ERROR_CODE);
             resultDTO.setDescription("登录失败，该用户已被冻结");
-        }catch (IllegalStateException e) {
+        } catch (IllegalStateException e) {
             resultDTO.setCode(SystemCode.SYS_OVERDUE_CODE);
             resultDTO.setDescription(SystemCode.SYS_OVERDUE_CODE_DESC);
-        }catch (Exception e) {
+        } catch (Exception e) {
             resultDTO.setCode(SystemCode.USER_LOGIN_ERROR_CODE);
             resultDTO.setDescription(SystemCode.USER_LOGIN_ERROR_MSG);
         }
         sendJsonResult(resultDTO, response);
     }
+
     /**
      * 角色菜单查询
-     * @param roleId 角色id
+     *
+     * @param roleId   角色id
      * @param response 响应体
      */
     @RequestMapping("queryMenuList.htm")
-    public void queryMenuList(String roleId, HttpServletResponse response){
+    public void queryMenuList(String roleId, HttpServletResponse response) {
         JSONArray array = JSON.parseArray(roleId);
         List<String> roleIdList = new ArrayList<>();
-        for (Object json : array){
+        for (Object json : array) {
             JSONObject jsonObject = JSON.parseObject(json.toString());
             Object roleId1 = jsonObject.get("roleId");
             roleIdList.add(roleId1.toString());
         }
         ResultDTO<List<MenuInfoVO>> resultDTO = new ResultDTO<>();
         List<MenuInfoVO> menuVOS = roleMenuService.queryMenuList(roleIdList);
+        //jdk8新特性 stream流处理去重
         ArrayList<MenuInfoVO> infos2 =
                 menuVOS.stream()
                         .collect(Collectors.collectingAndThen(Collectors
                                 .toCollection(() -> new TreeSet<>(Comparator
                                         .comparing(MenuInfoVO::getMenuId))), ArrayList::new));
         resultDTO.setResult(infos2);
-        resultDTO.buildReturnCode(SystemCode.RET_CODE_SUCC,SystemCode.RET_MSG_SUCC);
-        sendJson(resultDTO,response);
+        resultDTO.buildReturnCode(SystemCode.RET_CODE_SUCC, SystemCode.RET_MSG_SUCC);
+        sendJson(resultDTO, response);
     }
 
     /**
      * 退出
      */
-    @RequestMapping(method = RequestMethod.POST,value ="logout.htm")
+    @RequestMapping(method = RequestMethod.POST, value = "logout.htm")
     public void logout(HttpServletResponse response) {
         Subject currentUser = SecurityUtils.getSubject();
         currentUser.logout();
@@ -132,17 +136,17 @@ public class LoginController extends BaseController {
      * 注册
      */
     @RequestMapping("registerLogin.htm")
-    public void registerLogin(UserInfoSO so ,HttpServletResponse response){
+    public void registerLogin(UserInfoSO so, HttpServletResponse response) {
         ResultDTO<ZjUserInfo> resultDTO = new ResultDTO<>();
-        if (ObjectUtils.isEmpty(so.getUserId())||ObjectUtils.isEmpty(so.getPassword())||ObjectUtils.isEmpty(so.getUserName())){
-            throw new ExpressException( SystemCode.SERVICE_FAILD_CODE,"必填字段不能为空");
+        if (ObjectUtils.isEmpty(so.getUserId()) || ObjectUtils.isEmpty(so.getPassword()) || ObjectUtils.isEmpty(so.getUserName())) {
+            throw new ExpressException(SystemCode.SERVICE_FAILD_CODE, "必填字段不能为空");
         }
-        if (!so.getPassword().equals(so.getConfirmPassword())){
-            throw new ExpressException( SystemCode.SERVICE_FAILD_CODE,"密码不一致");
+        if (!so.getPassword().equals(so.getConfirmPassword())) {
+            throw new ExpressException(SystemCode.SERVICE_FAILD_CODE, "密码不一致");
         }
         UserVO user = userInfoMapper.queryShiroUserInfoByUserName(so.getUserId());
-        if (!ObjectUtils.isEmpty(user)){
-            throw new ExpressException(SystemCode.SERVICE_FAILD_CODE,"账号已存在，请勿重复注册");
+        if (!ObjectUtils.isEmpty(user)) {
+            throw new ExpressException(SystemCode.SERVICE_FAILD_CODE, "账号已存在，请勿重复注册");
         }
         ZjUserInfo userInfo = new ZjUserInfo();
         String currentTime = DateUtils.getCurrentTime();
@@ -153,17 +157,44 @@ public class LoginController extends BaseController {
         userInfo.setCreateTime(currentTime);
         userInfo.setUpdateTime(currentTime);
         userInfoMapper.insertSelective(userInfo);
-
-//        UsernamePasswordToken shiroToken = new UsernamePasswordToken(so.getUserId(), MD5Utils.md5(so.getPassword()));
-//        Subject currentUser = SecurityUtils.getSubject();
-//        currentUser.login(shiroToken);
-        //获取用户信息
-//        ZjUserInfo user1 = (ZjUserInfo) SecurityUtils.getSubject().getPrincipal();
         resultDTO.setDescription(SystemCode.RET_MSG_SUCC);
-//        String token = UUID.randomUUID().toString();
-//        user1.setToken(token);
         resultDTO.setCode(SystemCode.RET_CODE_SUCC);
-//        resultDTO.setResult(user1);
-        sendJsonSuccess(resultDTO,response);
+        sendJsonSuccess(resultDTO, response);
+    }
+
+    /**
+     * 用户查询页面
+     */
+    @RequestMapping("queryUserInfo.htm")
+    public void queryPage(HttpServletResponse response, UserQuery query) {
+        ResultDTO<PageResult<List<ZjUserInfo>>> resultDTO = new ResultDTO<>();
+        PageResult<List<ZjUserInfo>> listPageResult = userInfoService.queryPage(query);
+        resultDTO.setResult(listPageResult);
+        resultDTO.buildReturnCode(SystemCode.RET_CODE_SUCC, SystemCode.RET_MSG_SUCC);
+        sendJsonSuccessPage(resultDTO, response);
+    }
+
+    /**
+     * 用户信息修改
+     */
+    @RequestMapping("updateUserInfo.htm")
+    public void updateUserInfo(HttpServletResponse response, UserInfoSO so) {
+        ZjUserInfo zjUserInfo = userInfoMapper.selectByPrimaryKey(so.getUserId());
+        if (ObjectUtils.isEmpty(zjUserInfo)) {
+            throw new ExpressException(SystemCode.SERVICE_FAILD_CODE, "用户信息异常");
+        }
+        ZjUserInfo userInfo = new ZjUserInfo();
+        //如果密码修改，则和原密码对比  不一致新密码重新md5存入数据库
+        if (!so.getPassword().equals(zjUserInfo.getPassword())) {
+            String s = MD5Utils.md5(so.getPassword());
+            userInfo.setPassword(s);
+        }
+        userInfo.setTypeId(Integer.valueOf(so.getTypeId()));
+        userInfo.setIsDelete(Integer.valueOf(so.getIsDelete()));
+        userInfo.setUserId(so.getUserId());
+        userInfo.setUserName(so.getUserName());
+        userInfo.setUpdateTime(DateUtils.getCurrentTime());
+        userInfoMapper.updateByPrimaryKeySelective(userInfo);
+        sendJsonSuccess(response);
     }
 }

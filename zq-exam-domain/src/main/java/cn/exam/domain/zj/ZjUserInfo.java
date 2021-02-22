@@ -51,6 +51,4 @@ public class ZjUserInfo  {
     @Column(name ="type_id")
     private Integer typeId;
 
-    private String token;
-    private List<UserRoleVO> role;
 }

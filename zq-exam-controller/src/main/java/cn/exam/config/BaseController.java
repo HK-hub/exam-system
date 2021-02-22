@@ -4,6 +4,7 @@ import cn.exam.domain.zj.ZjUserInfo;
 import cn.exam.util.PageResult;
 import cn.exam.util.ResultDTO;
 import cn.exam.util.SystemCode;
+import cn.exam.vo.UserVO;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import org.apache.commons.logging.Log;
@@ -131,7 +132,7 @@ public class BaseController {
 		sendJson(map, response);
 	}
 
-    protected ZjUserInfo getCurrentUserInfo(){
+    protected UserVO getCurrentUserInfo(){
 		return userUtil.getUser();
 	}
 

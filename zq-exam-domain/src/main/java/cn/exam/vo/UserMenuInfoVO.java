@@ -18,7 +18,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserMenuInfoVO {
-    private ZjUserInfo user;
+    private UserVO user;
 //
     private List<MenuInfoVO> menuList;
 }

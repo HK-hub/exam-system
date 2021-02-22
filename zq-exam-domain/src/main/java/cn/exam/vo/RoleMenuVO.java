@@ -1,4 +1,4 @@
-package cn.zq.exam.vo;
+package cn.exam.vo;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

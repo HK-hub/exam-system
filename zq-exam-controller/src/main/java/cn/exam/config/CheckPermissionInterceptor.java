@@ -8,6 +8,7 @@ import cn.exam.util.Constant;
 import cn.exam.util.ExpressException;
 import cn.exam.util.LoginErrorException;
 import cn.exam.util.SystemCode;
+import cn.exam.vo.UserVO;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import org.apache.commons.logging.Log;
@@ -34,7 +35,7 @@ public class CheckPermissionInterceptor extends HandlerInterceptorAdapter {
 //    @Autowired
 //    private TblUserService userService;
 
-    private String exceptUrl = "login;getUserMenuInfo.htm";
+    private String exceptUrl = "login.htm;getUserMenuInfo.htm";
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
@@ -72,11 +73,11 @@ public class CheckPermissionInterceptor extends HandlerInterceptorAdapter {
 
     private void updateRedisKeyTime() {
         try {
-            ZjUserInfo user1 = (ZjUserInfo) SecurityUtils.getSubject().getPrincipal();
+            UserVO user1 = (UserVO)  SecurityUtils.getSubject().getPrincipal();
             if (ObjectUtils.isEmpty(user1)){
                 throw new ExpressException(SystemCode.SYSTEM_AGAIN_CODE,"权限失效");
             }
-            ZjUserInfo user = userUtil.getUser();
+            UserVO user = userUtil.getUser();
             if (user != null) {
                 String token = user.getToken();
                 String userAndMenuInfo = redisUtil.getKey(RedisKeyEnum.USER.getCode() + ":" + token);

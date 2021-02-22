@@ -1,4 +1,4 @@
-package cn.zq.exam.domain.zj;
+package cn.exam.domain.zj;
 
 import lombok.Data;
 

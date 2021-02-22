@@ -9,7 +9,10 @@ package cn.exam.dao.mapper.zj;
 
 
 import cn.exam.dao.mapper.base.CommonBaseMapper;
-import cn.zq.exam.domain.zj.ZjMenuInfo;
+import cn.exam.query.ZjMenuQuery;
+import cn.exam.domain.zj.ZjMenuInfo;
+
+import java.util.List;
 
 
 /**
@@ -20,4 +23,7 @@ import cn.zq.exam.domain.zj.ZjMenuInfo;
  */
 public interface ZjMenuInfoMapper
         extends CommonBaseMapper<ZjMenuInfo> {
+    List<ZjMenuInfo> queryPage(ZjMenuQuery query);
+
+    List<Integer> queryMenuIdListByRoleId(String roleId);
 }

@@ -7,6 +7,7 @@ import cn.exam.util.LoginErrorException;
 import cn.exam.util.SystemCode;
 import cn.exam.vo.MenuInfoVO;
 import cn.exam.vo.UserMenuInfoVO;
+import cn.exam.vo.UserVO;
 import com.alibaba.fastjson.JSON;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,7 +48,7 @@ public class UserUtil {
         if (StringUtils.isEmpty(json)) {
             throw new LoginErrorException(SystemCode.TOKEN_ERROR,"登录超时");
         }
-       ZjUserInfo user = JSON.parseObject(json, ZjUserInfo.class);
+        UserVO user = JSON.parseObject(json, UserVO.class);
         menuInfoVO.setUser(user);
         return menuInfoVO;
     }
@@ -55,7 +56,7 @@ public class UserUtil {
     /**
      * 获取用户
      */
-    public ZjUserInfo getUser(){
+    public UserVO getUser(){
         UserMenuInfoVO userAndPermission = getUserAndPermission();
         if (null == userAndPermission){
             throw new ExpressException(SystemCode.SERVICE_FAILD_CODE,"请重新登陆");

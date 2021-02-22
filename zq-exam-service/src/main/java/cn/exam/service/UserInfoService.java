@@ -1,6 +1,11 @@
 package cn.exam.service;
 
+import cn.exam.domain.zj.ZjUserInfo;
+import cn.exam.query.UserQuery;
+import cn.exam.util.PageResult;
 import cn.exam.vo.UserVO;
+
+import java.util.List;
 
 /**
  * @author YS
@@ -10,4 +15,7 @@ import cn.exam.vo.UserVO;
 public interface UserInfoService {
 
     UserVO queryUserInfoByName(String userId);
+
+
+    PageResult<List<ZjUserInfo>>queryPage(UserQuery  query );
 }

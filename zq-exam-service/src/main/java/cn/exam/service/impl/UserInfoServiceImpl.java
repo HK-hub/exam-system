@@ -1,6 +1,10 @@
 package cn.exam.service.impl;
 
+import cn.exam.domain.zj.ZjUserInfo;
+import cn.exam.query.UserQuery;
 import cn.exam.service.UserInfoService;
+import cn.exam.util.PageResult;
+import cn.exam.util.PageUtil;
 import cn.exam.vo.UserRoleVO;
 import cn.exam.dao.mapper.zj.ZjUserInfoMapper;
 
@@ -30,5 +34,10 @@ public class UserInfoServiceImpl implements UserInfoService {
             user.setRole(roleBean);
         }
         return user;
+    }
+
+    @Override
+    public PageResult<List<ZjUserInfo>> queryPage(UserQuery query) {
+        return PageUtil.execute(() -> userMapper.queryPage(query), query);
     }
 }

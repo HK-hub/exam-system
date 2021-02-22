@@ -27,6 +27,8 @@ public class UserInfoSO {
 
     private String confirmPassword;
 
+    private String isDelete;
+
 
 
 

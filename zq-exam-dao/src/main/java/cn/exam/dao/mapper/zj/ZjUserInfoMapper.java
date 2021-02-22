@@ -9,6 +9,7 @@ package cn.exam.dao.mapper.zj;
 
 import cn.exam.dao.mapper.base.CommonBaseMapper;
 import cn.exam.domain.zj.ZjUserInfo;
+import cn.exam.query.UserQuery;
 import cn.exam.vo.UserRoleVO;
 import cn.exam.vo.UserVO;
 import org.apache.ibatis.annotations.Mapper;
@@ -36,6 +37,9 @@ public interface ZjUserInfoMapper extends CommonBaseMapper<ZjUserInfo> {
      */
     @Select("SELECT   a.user_id userId,a.role_id roleId,b.role_name  roleName FROM zj_user_role a LEFT JOIN zj_role b ON a.role_id = b.role_id WHERE a.user_id=#{userId}")
     List<UserRoleVO> queryUserRoleByUserId(@Param("userId")String userId);
+
+
+    List<ZjUserInfo>queryPage(UserQuery query);
 
 
 
