@@ -4,12 +4,12 @@
 
 
     <select id="queryPage" resultType="cn.exam.domain.zj.ZjMenuInfo">
- SELECT  menu_id ,menu_name,menu_index,menu_degree,parent_id,create_time
+ SELECT  menu_id menuId,menu_name menuName,menu_index menuIndex,menu_degree menuDegree,parent_id parentId,create_time createTime
         FROM zj_menu_info
         WHERE menu_status=1
         ORDER BY create_time DESC
     </select>
     <select id="queryMenuIdListByRoleId" resultType="java.lang.Integer">
- SELECT b.menu_id FROM zj_menu_info a LEFT JOIN zj_role_menu b  ON a.`menu_id` =b.menu_id AND b.role_id=#{roleId} AND a.menu_degree=1
+ SELECT b.menu_id menuId FROM zj_menu_info a LEFT JOIN zj_role_menu b  ON a.`menu_id` =b.menu_id AND b.role_id=#{roleId} AND a.menu_degree=1
     </select>
 </mapper>

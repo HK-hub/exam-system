@@ -12,12 +12,12 @@ public class auto {
     private static final String URL = "jdbc:mysql://49.233.74.211:3306/zj_exam";
     private static final String USERNAME = "cat";
     private static final String PASSWORD = "cat123";
-    private static final String TABLE ="zj_user_role";
+    private static final String TABLE ="zj_title_info";
 
     @Test
     public  void testDomain() throws Exception {
-        AutoCodeUtil.autoDomain(URL,USERNAME,PASSWORD,TABLE,"cn.zq.exam.domain.zj","zq-exam-domain");
-        AutoCodeUtil.autoMapper(TABLE,"cn.zq.exam.dao.mapper.zj","zq-exam-dao");
+        AutoCodeUtil.autoDomain(URL,USERNAME,PASSWORD,TABLE,"cn.exam.domain.zj","zq-exam-domain");
+        AutoCodeUtil.autoMapper(TABLE,"cn.exam.dao.mapper.zj","zq-exam-dao");
 
     }
 }

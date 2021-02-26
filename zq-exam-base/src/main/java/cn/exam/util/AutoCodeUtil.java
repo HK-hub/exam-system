@@ -149,7 +149,7 @@ public class AutoCodeUtil {
                 " */\n" +
                 "package "+packageName+";\n" +
                 "\n" +
-                "import cn.zq.exam.dao.mapper.base.CommonBaseMapper;\n" +
+                "import cn.exam.dao.mapper.base.CommonBaseMapper;\n" +
                 "\n" +
                 "\n" +
                 "/**\n" +

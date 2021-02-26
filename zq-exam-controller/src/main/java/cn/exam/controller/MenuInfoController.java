@@ -5,9 +5,7 @@ import cn.exam.domain.zj.ZjMenuInfo;
 import cn.exam.query.ZjMenuQuery;
 import cn.exam.service.ZjMenuInfoService;
 import cn.exam.so.RoleMenuIdSO;
-import cn.exam.util.PageResult;
-import cn.exam.util.ResultDTO;
-import cn.exam.util.SystemCode;
+import cn.exam.util.*;
 import cn.exam.vo.RoleMenuVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -80,6 +78,10 @@ public class MenuInfoController extends BaseController {
 
     @RequestMapping("insertMenuInfo.htm")
     public void insertMenuInfo(ZjMenuInfo info ,HttpServletResponse response){
+        String currentDateTime = DateUtil.getCurrentDateTime();
+        info.setMenuStatus(1);
+        info.setCreateTime(currentDateTime);
+        info.setUpdateTime(currentDateTime);
         menuInfoService.insertMenuInfo(info);
         sendJsonSuccess(response);
     }
