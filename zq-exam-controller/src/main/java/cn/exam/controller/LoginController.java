@@ -3,7 +3,9 @@ package cn.exam.controller;
 import cn.exam.config.BaseController;
 import cn.exam.config.RedisUtil;
 import cn.exam.dao.mapper.zj.ZjUserInfoMapper;
+import cn.exam.dao.mapper.zj.ZjUserRoleMapper;
 import cn.exam.domain.zj.ZjUserInfo;
+import cn.exam.domain.zj.ZjUserRole;
 import cn.exam.query.UserQuery;
 import cn.exam.redis.RedisKeyEnum;
 import cn.exam.service.UserInfoService;
@@ -47,6 +49,8 @@ public class LoginController extends BaseController {
     private RedisUtil redisUtil;
     @Autowired
     private ZjRoleMenuService roleMenuService;
+    @Autowired
+    private ZjUserRoleMapper  userRoleMapper;
 
     /**
      * 登录
@@ -157,6 +161,14 @@ public class LoginController extends BaseController {
         userInfo.setCreateTime(currentTime);
         userInfo.setUpdateTime(currentTime);
         userInfoMapper.insertSelective(userInfo);
+        ZjUserRole userRole = new ZjUserRole();
+        if (Integer.parseInt(so.getTypeId())==0){
+            userRole.setRoleId("student");
+        }else if (Integer.parseInt(so.getTypeId())==1){
+            userRole.setRoleId("teacher");
+        }
+        userRole.setUserId(userInfo.getUserId());
+        userRoleMapper.insertSelective(userRole);
         resultDTO.setDescription(SystemCode.RET_MSG_SUCC);
         resultDTO.setCode(SystemCode.RET_CODE_SUCC);
         sendJsonSuccess(resultDTO, response);

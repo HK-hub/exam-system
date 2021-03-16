@@ -12,7 +12,7 @@ public class auto {
     private static final String URL = "jdbc:mysql://49.233.74.211:3306/zj_exam";
     private static final String USERNAME = "cat";
     private static final String PASSWORD = "cat123";
-    private static final String TABLE ="zj_title_info";
+    private static final String TABLE ="zj_class_info";
 
     @Test
     public  void testDomain() throws Exception {

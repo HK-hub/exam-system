@@ -10,6 +10,8 @@ package cn.exam.dao.mapper.zj;
 import cn.exam.dao.mapper.base.CommonBaseMapper;
 import cn.exam.domain.zj.ZjTitleInfo;
 import cn.exam.query.TitlePageQuery;
+import cn.exam.vo.TitleVO;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -23,8 +25,14 @@ import java.util.List;
 public interface ZjTitleInfoMapper
         extends CommonBaseMapper<ZjTitleInfo> {
 
-    List<ZjTitleInfo> queryPage(TitlePageQuery query);
+    List<TitleVO> queryPage(TitlePageQuery query);
 
+
+    TitleVO queryTitleInfo(Integer titleId);
+    //classId 查询试题
+    List<ZjTitleInfo> queryTitleByClassId(Integer classId);
+    //在一个难度区间
+    List<ZjTitleInfo> queryTitleByDifficulty(@Param("difficulty1") Integer difficulty1,@Param("difficulty2") Integer difficulty2,@Param("classId") Integer classId);
 
 
 }
