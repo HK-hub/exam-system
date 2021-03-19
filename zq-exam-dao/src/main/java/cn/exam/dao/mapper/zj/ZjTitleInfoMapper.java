@@ -34,5 +34,5 @@ public interface ZjTitleInfoMapper
     //在一个难度区间
     List<ZjTitleInfo> queryTitleByDifficulty(@Param("difficulty1") Integer difficulty1,@Param("difficulty2") Integer difficulty2,@Param("classId") Integer classId);
 
-
+    List<ZjTitleInfo> queryListByTitleId(@Param("titleIdList") List<Integer> titleIdList);
 }

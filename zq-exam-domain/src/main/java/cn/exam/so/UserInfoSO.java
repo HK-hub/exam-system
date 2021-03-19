@@ -16,7 +16,7 @@ public class UserInfoSO {
 
 
 
-    private String typeId;
+    private Integer typeId;
 
     /**
      * 密码
@@ -28,6 +28,8 @@ public class UserInfoSO {
     private String confirmPassword;
 
     private String isDelete;
+
+    private Integer classId;
 
 
 

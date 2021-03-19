@@ -5,6 +5,7 @@ import cn.exam.query.UserQuery;
 import cn.exam.service.UserInfoService;
 import cn.exam.util.PageResult;
 import cn.exam.util.PageUtil;
+import cn.exam.vo.UserPageVO;
 import cn.exam.vo.UserRoleVO;
 import cn.exam.dao.mapper.zj.ZjUserInfoMapper;
 
@@ -37,7 +38,7 @@ public class UserInfoServiceImpl implements UserInfoService {
     }
 
     @Override
-    public PageResult<List<ZjUserInfo>> queryPage(UserQuery query) {
+    public PageResult<List<UserPageVO>> queryPage(UserQuery query) {
         return PageUtil.execute(() -> userMapper.queryPage(query), query);
     }
 }

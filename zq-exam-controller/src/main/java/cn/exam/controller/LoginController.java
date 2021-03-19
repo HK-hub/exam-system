@@ -12,6 +12,7 @@ import cn.exam.service.UserInfoService;
 import cn.exam.service.ZjRoleMenuService;
 import cn.exam.util.*;
 import cn.exam.vo.MenuInfoVO;
+import cn.exam.vo.UserPageVO;
 import cn.exam.vo.UserVO;
 import cn.zq.exam.so.UserInfoSO;
 import com.alibaba.fastjson.JSON;
@@ -156,15 +157,18 @@ public class LoginController extends BaseController {
         String currentTime = DateUtils.getCurrentTime();
         userInfo.setUserId(so.getUserId());
         userInfo.setUserName(so.getUserName());
-        userInfo.setTypeId(Integer.valueOf(so.getTypeId()));
+        userInfo.setTypeId(so.getTypeId());
+        if (so.getTypeId()==0){
+            userInfo.setClassId(so.getClassId());
+        }
         userInfo.setPassword(MD5Utils.md5(so.getPassword()));
         userInfo.setCreateTime(currentTime);
         userInfo.setUpdateTime(currentTime);
         userInfoMapper.insertSelective(userInfo);
         ZjUserRole userRole = new ZjUserRole();
-        if (Integer.parseInt(so.getTypeId())==0){
+        if (so.getTypeId()==0){
             userRole.setRoleId("student");
-        }else if (Integer.parseInt(so.getTypeId())==1){
+        }else if (so.getTypeId()==1){
             userRole.setRoleId("teacher");
         }
         userRole.setUserId(userInfo.getUserId());
@@ -179,8 +183,8 @@ public class LoginController extends BaseController {
      */
     @RequestMapping("queryUserInfo.htm")
     public void queryPage(HttpServletResponse response, UserQuery query) {
-        ResultDTO<PageResult<List<ZjUserInfo>>> resultDTO = new ResultDTO<>();
-        PageResult<List<ZjUserInfo>> listPageResult = userInfoService.queryPage(query);
+        ResultDTO<PageResult<List<UserPageVO>>> resultDTO = new ResultDTO<>();
+        PageResult<List<UserPageVO>> listPageResult = userInfoService.queryPage(query);
         resultDTO.setResult(listPageResult);
         resultDTO.buildReturnCode(SystemCode.RET_CODE_SUCC, SystemCode.RET_MSG_SUCC);
         sendJsonSuccessPage(resultDTO, response);

@@ -10,6 +10,8 @@ package cn.exam.dao.mapper.zj;
 import cn.exam.dao.mapper.base.CommonBaseMapper;
 import cn.exam.domain.zj.ZjSubjectUserLink;
 
+import java.util.List;
+
 
 /**
  * @File: ZjSubjectUserLink
@@ -19,4 +21,9 @@ import cn.exam.domain.zj.ZjSubjectUserLink;
  */
 public interface ZjSubjectUserLinkMapper
         extends CommonBaseMapper<ZjSubjectUserLink> {
+
+
+    List<ZjSubjectUserLink> queryByList(Integer paperId);
+
+
 }

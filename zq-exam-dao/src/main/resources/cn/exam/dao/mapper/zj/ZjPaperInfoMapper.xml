@@ -2,12 +2,20 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="cn.exam.dao.mapper.zj.ZjPaperInfoMapper">
 
+    <sql id="baseCondition">
+        <where>
+            <if test="classId != null and classId != ''">
+                a.class_id =#{classId}
+            </if>
+        </where>
+    </sql>
 
     <select id="queryPage" resultType="cn.exam.vo.PaperPageVO" parameterType="cn.exam.query.PaperQuery">
         SELECT a.paper_id paperId, a.paper_name paperName, a.subject_id ,b.subject_name subjectName ,a.difficulty ,a.class_id classId , c.class_name className ,a.paper_date paperDate ,a.exam_date examDate
         , a.paper_num paperNum ,a.teach_name teachName ,a.create_time createTime
          FROM zj_paper_info a LEFT JOIN zj_subject_info b ON a.subject_id = b.subject_id
          LEFT JOIN zj_class_info c ON a.class_id = c.class_id
+        <include refid="baseCondition"></include>
     </select>
     <select id="queryTitlePaper" resultType="cn.exam.vo.PaperTitleVO">
            SELECT a.paper_id  paperId, b.title_id titleId,b.title_name titleName, b.title_answer  titleAnswer, b.title_fraction fraction,

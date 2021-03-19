@@ -6,8 +6,9 @@
     <select id="queryShiroUserInfoByUserName" resultType="cn.exam.vo.UserVO">
         select  user_id userId,password,user_name userName from zj_user_info where user_id =#{userId} and is_delete=0
     </select>
-    <select id="queryPage" resultType="cn.exam.domain.zj.ZjUserInfo">
-        select  user_id userId,password,user_name userName ,type_id typeId ,create_time createTime ,is_delete isDelete from zj_user_info
+    <select id="queryPage" resultType="cn.exam.vo.UserPageVO">
+        select  a.user_id userId,a.password,user_name userName ,a.type_id typeId ,a.create_time createTime ,a.is_delete isDelete ,b.class_name className
+        from zj_user_info a left join zj_class_info b on a.class_id = b.class_id
     </select>
 </mapper>
 

@@ -30,4 +30,11 @@
           from zj_title_info a left join zj_subject_info b on a.subject_id = b.subject_id
           where a.title_type  &gt;= #{difficulty1} and a.title_type &lt;= #{difficulty2} and a.class_id = #{classId}
     </select>
+    <select id="queryListByTitleId" resultType="cn.exam.domain.zj.ZjTitleInfo">
+        select title_id titleId, title_answer titleAnswer ,title_fraction  titleFraction from zj_title_info where
+         title_id IN
+        <foreach collection="titleIdList" open="(" separator="," close=")" item="titleId">
+            #{titleId}
+        </foreach>
+    </select>
 </mapper>

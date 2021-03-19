@@ -38,6 +38,8 @@ public class ZjUserInfo  {
      */
     @Column(name ="is_delete")
     private Integer isDelete;
+    @Column(name ="class_id")
+    private Integer classId;
     /**
      * 开始时间
      */
