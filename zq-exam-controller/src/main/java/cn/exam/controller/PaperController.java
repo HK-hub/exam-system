@@ -10,11 +10,14 @@ import cn.exam.domain.zj.ZjSubjectUserLink;
 import cn.exam.domain.zj.ZjTitleInfo;
 import cn.exam.query.PaperQuery;
 import cn.exam.service.ExaminationService;
+import cn.exam.service.PaperTestService;
 import cn.exam.util.DateUtil;
 import cn.exam.util.PageResult;
 import cn.exam.util.ResultDTO;
 import cn.exam.util.SystemCode;
+import cn.exam.vo.ExamPaperVO;
 import cn.exam.vo.PaperPageVO;
+import cn.exam.vo.PaperTestLevel;
 import cn.exam.vo.UserVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -37,12 +40,9 @@ public class PaperController extends BaseController {
     private ExaminationService examinationService;
     @Autowired
     private UserUtil userUtil;
+
     @Autowired
-    private ZjTitleInfoMapper titleInfoMapper;
-    @Autowired
-    private ZjSubjectUserLinkMapper userLinkMapper;
-    @Autowired
-    private ZjPaperTestMapper paperTestMapper;
+    private PaperTestService testService;
 
 
     /**
@@ -67,31 +67,12 @@ public class PaperController extends BaseController {
      */
     @RequestMapping("addPaperByStudent.htm")
     public void addPaperByStudent(Integer paperId,HttpServletResponse response){
-        List<ZjSubjectUserLink> zjSubjectUserLinks = userLinkMapper.queryByList(paperId);
-        List<Integer> titleIdList = new ArrayList<>();
-        if (!ObjectUtils.isEmpty(zjSubjectUserLinks)){
-            zjSubjectUserLinks.forEach(f->{
-                titleIdList.add(f.getTitleId());
-            });
-        }
         UserVO user = userUtil.getUser();
-        ZjSubjectUserLink userLink = zjSubjectUserLinks.get(0);
-        List<ZjTitleInfo> zjTitleInfos = titleInfoMapper.queryListByTitleId(titleIdList);
-        List<ZjPaperTest> paperTests = new ArrayList<>();
-        zjTitleInfos.forEach(f->{
-            ZjPaperTest paperTest = new ZjPaperTest();
-            paperTest.setTitleAnswer(f.getTitleAnswer());
-            paperTest.setClassId(userLink.getClassId());
-            paperTest.setPaperId(paperId);
-            paperTest.setTitleFraction(f.getTitleFraction());
-            paperTest.setTitleId(f.getTitleId());
-            paperTest.setUserId(user.getUserId());
-            paperTest.setUserName(user.getUserName());
-            paperTest.setCreateTime(DateUtil.getCurrentDateTime());
-            paperTests.add(paperTest);
-        });
-        paperTestMapper.insertList(paperTests);
-        sendJsonSuccess(response);
+        ResultDTO<PaperTestLevel> resultDTO = new ResultDTO<>();
+        resultDTO.setResult(testService.paperTest(paperId, user.getUserId()));
+        resultDTO.buildReturnCode(SystemCode.RET_CODE_SUCC, SystemCode.RET_MSG_SUCC);
+        sendJsonSuccess(resultDTO, response);
+
     }
 
 

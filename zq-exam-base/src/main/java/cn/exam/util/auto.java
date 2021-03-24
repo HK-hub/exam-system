@@ -9,10 +9,10 @@ import org.junit.Test;
  */
 public class auto {
     private static final String DRIVE = "com.mysql.jdbc.Driver";
-    private static final String URL = "jdbc:mysql://49.233.74.211:3306/zj_exam";
+    private static final String URL = "jdbc:mysql://106.14.159.41:3306/cat";
     private static final String USERNAME = "cat";
     private static final String PASSWORD = "cat123";
-    private static final String TABLE ="zj_class_info";
+    private static final String TABLE ="zj_paper_test";
 
     @Test
     public  void testDomain() throws Exception {

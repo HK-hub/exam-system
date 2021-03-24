@@ -2,12 +2,14 @@ package cn.exam.controller;
 
 import cn.exam.config.BaseController;
 import cn.exam.config.UserUtil;
-import cn.exam.domain.zj.ZjMenuInfo;
-import cn.exam.domain.zj.ZjPaperInfo;
-import cn.exam.domain.zj.ZjTitleInfo;
+import cn.exam.dao.mapper.zj.ZjPaperTestMapper;
+import cn.exam.dao.mapper.zj.ZjSubjectUserLinkMapper;
+import cn.exam.dao.mapper.zj.ZjTitleInfoMapper;
+import cn.exam.domain.zj.*;
 import cn.exam.query.PaperQuery;
 import cn.exam.query.TitlePageQuery;
 import cn.exam.service.ExaminationService;
+import cn.exam.util.DateUtil;
 import cn.exam.util.PageResult;
 import cn.exam.util.ResultDTO;
 import cn.exam.util.SystemCode;
@@ -17,9 +19,11 @@ import cn.exam.vo.TitleVO;
 import cn.exam.vo.UserVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -35,6 +39,12 @@ public class ExaminationController extends BaseController {
     private ExaminationService examinationService;
     @Autowired
     private UserUtil userUtil;
+    @Autowired
+    private ZjTitleInfoMapper titleInfoMapper;
+    @Autowired
+    private ZjSubjectUserLinkMapper userLinkMapper;
+    @Autowired
+    private ZjPaperTestMapper paperTestMapper;
 
 
     @RequestMapping("queryTitlePage.htm")

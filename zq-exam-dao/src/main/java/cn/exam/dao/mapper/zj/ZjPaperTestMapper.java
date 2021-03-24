@@ -9,6 +9,10 @@ package cn.exam.dao.mapper.zj;
 
 import cn.exam.dao.mapper.base.CommonBaseMapper;
 import cn.exam.domain.zj.ZjPaperTest;
+import cn.exam.vo.PaperTestVO;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 
 /**
@@ -19,4 +23,6 @@ import cn.exam.domain.zj.ZjPaperTest;
  */
 public interface ZjPaperTestMapper
         extends CommonBaseMapper<ZjPaperTest> {
+
+    List<PaperTestVO> queryPaperTest(@Param("userId") String userId,@Param("paperId") Integer paperId);
 }

@@ -4,6 +4,7 @@ import cn.exam.dao.mapper.zj.ZjPaperInfoMapper;
 import cn.exam.dao.mapper.zj.ZjSubjectUserLinkMapper;
 import cn.exam.dao.mapper.zj.ZjTitleInfoMapper;
 import cn.exam.domain.zj.ZjPaperInfo;
+import cn.exam.domain.zj.ZjPaperTest;
 import cn.exam.domain.zj.ZjSubjectUserLink;
 import cn.exam.domain.zj.ZjTitleInfo;
 import cn.exam.query.PaperQuery;
@@ -212,6 +213,30 @@ public class ExaminationServiceImpl implements ExaminationService {
             userLink.setUpdateTime(currentDateTime);
             userLinkMapper.insertSelective(userLink);
         });
+//        List<ZjSubjectUserLink> zjSubjectUserLinks = userLinkMapper.queryByList(paperInfo.getPaperId());
+//        List<Integer> titleIdList = new ArrayList<>();
+//        if (!ObjectUtils.isEmpty(zjSubjectUserLinks)){
+//            zjSubjectUserLinks.forEach(f->{
+//                titleIdList.add(f.getTitleId());
+//            });
+//        }
+//
+//        ZjSubjectUserLink userLink = zjSubjectUserLinks.get(0);
+//        List<ZjTitleInfo> zjTitleInfos2 = titleInfoMapper.queryListByTitleId(titleIdList);
+//        List<ZjPaperTest> paperTests = new ArrayList<>();
+//        zjTitleInfos2.forEach(f->{
+//            ZjPaperTest paperTest = new ZjPaperTest();
+//            paperTest.setTitleAnswer(f.getTitleAnswer());
+//            paperTest.setClassId(userLink.getClassId());
+//            paperTest.setPaperId(paperInfo.getPaperId());
+//            paperTest.setTitleFraction(f.getTitleFraction());
+//            paperTest.setTitleId(f.getTitleId());
+//            paperTest.setUserId(user.getUserId());
+//            paperTest.setUserName(user.getUserName());
+//            paperTest.setCreateTime(DateUtil.getCurrentDateTime());
+//            paperTests.add(paperTest);
+//        });
+//        paperTestMapper.insertList(paperTests);
 
 
 
