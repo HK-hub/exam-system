@@ -64,15 +64,18 @@ public class PaperTestServiceImpl implements PaperTestService {
                 levelOne.setChoice2(f.getChoice2());
                 levelOne.setChoice3(f.getChoice3());
                 levelOne.setChoice4(f.getChoice4());
+                levelOne.setId(f.getId());
                 oneList1.add(levelOne);
             }else if(f.getTitleStatus()==1){
                 TestLevelOne levelOne = new TestLevelOne();
                 levelOne.setTitleName(f.getTitleName());
                 levelOne.setTitleFraction(f.getTitleFraction());
+                levelOne.setId(f.getId());
                 oneList2.add(levelOne);
             }else if (f.getTitleStatus()==2){
                 TestLevelOne levelOne = new TestLevelOne();
                 levelOne.setTitleName(f.getTitleName());
+                levelOne.setId(f.getId());
                 levelOne.setTitleFraction(f.getTitleFraction());
                 oneList3.add(levelOne);
             }
