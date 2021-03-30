@@ -10,5 +10,8 @@
         select  a.user_id userId,a.password,user_name userName ,a.type_id typeId ,a.create_time createTime ,a.is_delete isDelete ,b.class_name className
         from zj_user_info a left join zj_class_info b on a.class_id = b.class_id
     </select>
+    <select id="queryListByClassId" resultType="cn.exam.domain.zj.ZjUserInfo">
+        select  user_id userId,user_name userName from zj_user_info where class_id =#{classId} and is_delete=0 and type_id=0
+    </select>
 </mapper>
 

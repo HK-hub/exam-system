@@ -39,13 +39,6 @@ public class ExaminationController extends BaseController {
     private ExaminationService examinationService;
     @Autowired
     private UserUtil userUtil;
-    @Autowired
-    private ZjTitleInfoMapper titleInfoMapper;
-    @Autowired
-    private ZjSubjectUserLinkMapper userLinkMapper;
-    @Autowired
-    private ZjPaperTestMapper paperTestMapper;
-
 
     @RequestMapping("queryTitlePage.htm")
     public void queryTitlePage(HttpServletResponse response, TitlePageQuery query) {

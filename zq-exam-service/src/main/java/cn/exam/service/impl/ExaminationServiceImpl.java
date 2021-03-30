@@ -1,12 +1,7 @@
 package cn.exam.service.impl;
 
-import cn.exam.dao.mapper.zj.ZjPaperInfoMapper;
-import cn.exam.dao.mapper.zj.ZjSubjectUserLinkMapper;
-import cn.exam.dao.mapper.zj.ZjTitleInfoMapper;
-import cn.exam.domain.zj.ZjPaperInfo;
-import cn.exam.domain.zj.ZjPaperTest;
-import cn.exam.domain.zj.ZjSubjectUserLink;
-import cn.exam.domain.zj.ZjTitleInfo;
+import cn.exam.dao.mapper.zj.*;
+import cn.exam.domain.zj.*;
 import cn.exam.query.PaperQuery;
 import cn.exam.query.TitlePageQuery;
 import cn.exam.service.ExaminationService;
@@ -36,6 +31,12 @@ public class ExaminationServiceImpl implements ExaminationService {
     private ZjPaperInfoMapper paperInfoMapper;
     @Autowired
     private ZjSubjectUserLinkMapper userLinkMapper;
+    @Autowired
+    private ZjPaperTestMapper paperTestMapper;
+    @Autowired
+    private ZjUserInfoMapper userInfoMapper;
+    @Autowired
+    private ZjPaperUserMapper paperUserMapper;
 
 
     @Override
@@ -169,16 +170,6 @@ public class ExaminationServiceImpl implements ExaminationService {
                 paperVO1.setFraction(titleVO.getFraction());
                 paperVO1.setTitle(titleVO.getTitleName());
                 paperVO1.setValue(titleVO.getTitleAnswer());
-//                //三级
-//                List<AnswerVO> item = new ArrayList<>();
-//                String data[] = {"A", "B", "C", "D"};
-//                for (int i=0 ;i<data.length ;i++){
-//                    AnswerVO answerVO = new AnswerVO();
-//                    answerVO.setLabel(data[i]);
-//                    answerVO.setValue(titleVO.getChoice1());
-//                    item.add(answerVO);
-//                }
-//                paperVO1.setItem(item);
                 list.add(paperVO1);
             }
             paperVO.setList(list);
@@ -200,7 +191,8 @@ public class ExaminationServiceImpl implements ExaminationService {
         if (zjTitleInfos1.size()<paperInfo.getPaperNum()){
             throw new ExpressException(SystemCode.SERVICE_FAILD_CODE,"该班级该难度的试题不够");
         }
-
+        int  result1 = zjTitleInfos1.stream().mapToInt(ZjTitleInfo::getTitleFraction).sum();
+        paperInfo.setPaperScore(result1);
         paperInfo.setCreateTime(currentDateTime);
         paperInfo.setUpdateTime(currentDateTime);
         paperInfoMapper.insertSelective(paperInfo);
@@ -213,30 +205,39 @@ public class ExaminationServiceImpl implements ExaminationService {
             userLink.setUpdateTime(currentDateTime);
             userLinkMapper.insertSelective(userLink);
         });
-//        List<ZjSubjectUserLink> zjSubjectUserLinks = userLinkMapper.queryByList(paperInfo.getPaperId());
-//        List<Integer> titleIdList = new ArrayList<>();
-//        if (!ObjectUtils.isEmpty(zjSubjectUserLinks)){
-//            zjSubjectUserLinks.forEach(f->{
-//                titleIdList.add(f.getTitleId());
-//            });
-//        }
-//
-//        ZjSubjectUserLink userLink = zjSubjectUserLinks.get(0);
-//        List<ZjTitleInfo> zjTitleInfos2 = titleInfoMapper.queryListByTitleId(titleIdList);
-//        List<ZjPaperTest> paperTests = new ArrayList<>();
-//        zjTitleInfos2.forEach(f->{
-//            ZjPaperTest paperTest = new ZjPaperTest();
-//            paperTest.setTitleAnswer(f.getTitleAnswer());
-//            paperTest.setClassId(userLink.getClassId());
-//            paperTest.setPaperId(paperInfo.getPaperId());
-//            paperTest.setTitleFraction(f.getTitleFraction());
-//            paperTest.setTitleId(f.getTitleId());
-//            paperTest.setUserId(user.getUserId());
-//            paperTest.setUserName(user.getUserName());
-//            paperTest.setCreateTime(DateUtil.getCurrentDateTime());
-//            paperTests.add(paperTest);
-//        });
-//        paperTestMapper.insertList(paperTests);
+        //组卷完成给这个班级里面的所有学生 生成试卷
+        List<ZjUserInfo> zjUserInfos = userInfoMapper.queryListByClassId(paperInfo.getClassId());
+        List<ZjSubjectUserLink> zjSubjectUserLinks = userLinkMapper.queryByList(paperInfo.getPaperId());
+        List<Integer> titleIdList = new ArrayList<>();
+        if (!ObjectUtils.isEmpty(zjSubjectUserLinks)){
+            zjSubjectUserLinks.forEach(f->{
+                titleIdList.add(f.getTitleId());
+            });
+        }
+
+        ZjSubjectUserLink userLink = zjSubjectUserLinks.get(0);
+        List<ZjTitleInfo> zjTitleInfos2 = titleInfoMapper.queryListByTitleId(titleIdList);
+        List<ZjPaperTest> paperTests = new ArrayList<>();
+        zjUserInfos.forEach(y->{
+            zjTitleInfos2.forEach(f->{
+                ZjPaperTest paperTest = new ZjPaperTest();
+                paperTest.setTitleAnswer(f.getTitleAnswer());
+                paperTest.setClassId(userLink.getClassId());
+                paperTest.setPaperId(paperInfo.getPaperId());
+                paperTest.setTitleFraction(f.getTitleFraction());
+                paperTest.setTitleId(f.getTitleId());
+                paperTest.setUserId(y.getUserId());
+                paperTest.setUserName(y.getUserName());
+                paperTest.setCreateTime(DateUtil.getCurrentDateTime());
+                paperTests.add(paperTest);
+            });
+            ZjPaperUser paperUser =new ZjPaperUser();
+            paperUser.setPaperId(paperInfo.getPaperId());
+            paperUser.setUserId(y.getUserId());
+            paperUserMapper.insertSelective(paperUser);
+        });
+        paperTestMapper.insertList(paperTests);
+
 
 
 

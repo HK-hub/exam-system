@@ -1,6 +1,15 @@
 package cn.exam.service;
 
+import cn.exam.domain.zj.ZjSubjectInfo;
+import cn.exam.query.PaperQuery;
+import cn.exam.query.PaperUserQuery;
+import cn.exam.query.SubjectQuery;
+import cn.exam.so.PaperSuccessSO;
+import cn.exam.util.PageResult;
 import cn.exam.vo.PaperTestLevel;
+import cn.exam.vo.PaperUserPapage;
+
+import java.util.List;
 
 /**
  * @author YS
@@ -10,6 +19,13 @@ import cn.exam.vo.PaperTestLevel;
 public interface PaperTestService {
 
     PaperTestLevel paperTest(Integer paperId,String userId);
+
+    List<Integer> queryListIdByPaperId(Integer paperId);
+
+    void paperEnd(PaperSuccessSO successSO);
+
+    PageResult<List<PaperUserPapage>> queryPaperUser(PaperUserQuery query);
+
 
 
 }

@@ -2,27 +2,31 @@ package cn.exam.controller;
 
 import cn.exam.config.BaseController;
 import cn.exam.config.UserUtil;
+import cn.exam.dao.mapper.zj.ZjPaperInfoMapper;
 import cn.exam.dao.mapper.zj.ZjPaperTestMapper;
 import cn.exam.dao.mapper.zj.ZjSubjectUserLinkMapper;
 import cn.exam.dao.mapper.zj.ZjTitleInfoMapper;
 import cn.exam.domain.zj.ZjPaperTest;
+import cn.exam.domain.zj.ZjSubjectInfo;
 import cn.exam.domain.zj.ZjSubjectUserLink;
 import cn.exam.domain.zj.ZjTitleInfo;
 import cn.exam.query.PaperQuery;
+import cn.exam.query.PaperUserQuery;
 import cn.exam.service.ExaminationService;
 import cn.exam.service.PaperTestService;
+import cn.exam.so.PaperSO;
+import cn.exam.so.PaperSuccessSO;
 import cn.exam.util.DateUtil;
 import cn.exam.util.PageResult;
 import cn.exam.util.ResultDTO;
 import cn.exam.util.SystemCode;
-import cn.exam.vo.ExamPaperVO;
-import cn.exam.vo.PaperPageVO;
-import cn.exam.vo.PaperTestLevel;
-import cn.exam.vo.UserVO;
+import cn.exam.vo.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.ObjectUtils;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
@@ -43,6 +47,10 @@ public class PaperController extends BaseController {
 
     @Autowired
     private PaperTestService testService;
+    @Autowired
+    private ZjPaperTestMapper paperTestMapper;
+    @Autowired
+    private ZjPaperInfoMapper paperInfoMapper;
 
 
     /**
@@ -56,6 +64,7 @@ public class PaperController extends BaseController {
         UserVO user = userUtil.getUser();
         Integer classId = user.getClassId();
         query.setClassId(classId);
+        query.setUserId(user.getUserId());
         PageResult<List<PaperPageVO>> listPageResult = examinationService.queryPage(query);
         resultDTO.setResult(listPageResult);
         resultDTO.buildReturnCode(SystemCode.RET_CODE_SUCC, SystemCode.RET_MSG_SUCC);
@@ -72,8 +81,46 @@ public class PaperController extends BaseController {
         resultDTO.setResult(testService.paperTest(paperId, user.getUserId()));
         resultDTO.buildReturnCode(SystemCode.RET_CODE_SUCC, SystemCode.RET_MSG_SUCC);
         sendJsonSuccess(resultDTO, response);
-
     }
+
+    /**
+     * 删除试卷
+     */
+    @RequestMapping("deletePaper.htm")
+    public void deletePaper(Integer paperId,HttpServletResponse response){
+        List<Integer> integers = testService.queryListIdByPaperId(paperId);
+        integers.forEach(f->{
+            paperTestMapper.deleteByPrimaryKey(f);
+        });
+        paperInfoMapper.deleteByPrimaryKey(paperId);
+        sendJsonSuccess( response);
+    }
+
+    /**
+     * 考试提交页面
+     * @param successSO
+     * @param response
+     */
+    @RequestMapping("successPaper.htm")
+    public void  successPaper(PaperSuccessSO successSO , HttpServletResponse response){
+        UserVO user = userUtil.getUser();
+        successSO.setUserId(user.getUserId());
+        testService.paperEnd(successSO);
+        sendJsonSuccess(response);
+    }
+
+    /**
+     * 成绩查询页面
+     */
+    @RequestMapping("queryPage.htm")
+    public void queryPage(PaperUserQuery query ,HttpServletResponse response){
+        ResultDTO<PageResult<List<PaperUserPapage>>> resultDTO = new ResultDTO<>();
+        PageResult<List<PaperUserPapage>> listPageResult = testService.queryPaperUser(query);
+        resultDTO.setResult(listPageResult);
+        resultDTO.buildReturnCode(SystemCode.RET_CODE_SUCC, SystemCode.RET_MSG_SUCC);
+        sendJsonSuccessPage(resultDTO, response);
+    }
+
 
 
 

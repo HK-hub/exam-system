@@ -11,4 +11,5 @@ import lombok.Data;
 public class PaperQuery extends BaseQuery {
 
     private Integer classId;
+    private String userId;
 }

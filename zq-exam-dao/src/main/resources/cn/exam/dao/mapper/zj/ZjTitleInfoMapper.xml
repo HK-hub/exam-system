@@ -5,9 +5,10 @@
 
     <select id="queryPage" resultType="cn.exam.vo.TitleVO">
         select  a.title_id  titleId, a.title_name  titleName, a.title_type titleType, a.title_fraction titleFraction , a.title_answer  titleAnswer, a.title_status titleStatus,
-         a.choice1 , a.choice2, a.choice3, a.choice4,
+         a.choice1 , a.choice2, a.choice3, a.choice4,c.class_name className,
          a.user_id userId, a.user_name userName, a.create_time createTime, b.subject_name subjectName
           from zj_title_info a left join zj_subject_info b on a.subject_id = b.subject_id
+          left join zj_class_info c on a.class_id = c.class_id
     </select>
     <select id="queryTitleInfo" resultType="cn.exam.vo.TitleVO">
             select  a.title_id  titleId, a.title_name  titleName, a.title_type titleType, a.title_fraction titleFraction , a.title_answer  titleAnswer, a.title_status titleStatus,

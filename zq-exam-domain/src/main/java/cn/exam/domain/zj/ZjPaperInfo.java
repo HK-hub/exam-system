@@ -3,6 +3,7 @@ package cn.exam.domain.zj;
 import lombok.Data;
 
 import javax.persistence.Column;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import java.io.Serializable;
@@ -21,6 +22,7 @@ public class ZjPaperInfo implements Serializable {
      */
     @Id
     @Column(name ="paper_id")
+    @GeneratedValue(generator = "JDBC")
     private Integer paperId;
     /**
      *
@@ -82,4 +84,6 @@ public class ZjPaperInfo implements Serializable {
      */
     @Column(name ="update_time")
     private String updateTime;
+    @Column(name ="paper_score")
+    private Integer paperScore;
 }

@@ -1,13 +1,26 @@
 package cn.exam.service.impl;
 
 import cn.exam.dao.mapper.zj.ZjPaperTestMapper;
+import cn.exam.dao.mapper.zj.ZjPaperUserMapper;
+import cn.exam.domain.zj.ZjPaperTest;
+import cn.exam.domain.zj.ZjPaperUser;
+import cn.exam.query.PaperQuery;
+import cn.exam.query.PaperUserQuery;
 import cn.exam.service.PaperTestService;
+import cn.exam.so.PaperSuccessSO;
+import cn.exam.util.PageResult;
+import cn.exam.util.PageUtil;
 import cn.exam.vo.PaperTestLevel;
 import cn.exam.vo.PaperTestVO;
-import cn.exam.vo.PaperTitleVO;
+import cn.exam.vo.PaperUserPapage;
 import cn.exam.vo.TestLevelOne;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.ObjectUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,9 +32,12 @@ import java.util.stream.Collectors;
  * @date 2021-03-19 13:37
  */
 @Service
+@Transactional
 public class PaperTestServiceImpl implements PaperTestService {
     @Autowired
     private ZjPaperTestMapper paperTestMapper;
+    @Autowired
+    private ZjPaperUserMapper paperUserMapper;
 
 
     @Override
@@ -84,5 +100,59 @@ public class PaperTestServiceImpl implements PaperTestService {
         testLevel.setOneList2(oneList2);
         testLevel.setOneList3(oneList3);
         return testLevel;
+    }
+
+    @Override
+    public List<Integer> queryListIdByPaperId(Integer paperId) {
+        return paperTestMapper.queryIdByPaperId(paperId);
+    }
+
+    @Override
+    public void paperEnd(PaperSuccessSO successSO) {
+        String paperList = successSO.getPaperList();
+        String str = "[" + paperList + "]";
+        JSONArray objects = JSON.parseArray(str);
+        List<Integer> ids = new ArrayList<>();
+        for (Object obj : objects){
+            ZjPaperTest paperTest = new ZjPaperTest();
+            JSONObject object = JSON.parseObject(obj.toString());
+            Object id = object.get("id");
+            Object val = object.get("val");
+            if (!ObjectUtils.isEmpty(id)){
+                paperTest.setId(Integer.valueOf(id.toString()));
+                ids.add(Integer.valueOf(id.toString()));
+            }
+            if (!ObjectUtils.isEmpty(val)){
+                paperTest.setAnswer(val.toString());
+                paperTestMapper.updateByPrimaryKeySelective(paperTest);
+            }
+        }
+        List<ZjPaperTest> paperTests = paperTestMapper.queryListById(ids);
+        Integer fraction = 0;
+        for (ZjPaperTest f :paperTests){
+            String all = f.getTitleAnswer().replaceAll(" ", "");
+            if (!ObjectUtils.isEmpty(f.getAnswer())){
+                String all1 = f.getAnswer().replaceAll(" ", "");
+                if (all.equals(all1)){
+                    fraction=fraction+f.getTitleFraction();
+                }
+            }
+        }
+        /**
+         * 查询考试人员成绩表
+         */
+        ZjPaperUser paperUser = new ZjPaperUser();
+        paperUser.setPaperId(successSO.getPaperId());
+        paperUser.setUserId(successSO.getUserId());
+        ZjPaperUser paperUser1 = paperUserMapper.queryPaper(paperUser);
+        //修改考试信息成绩
+        paperUser1.setFraction(fraction);
+        paperUser1.setStatus(1);
+        paperUserMapper.updateByPrimaryKeySelective(paperUser1);
+    }
+
+    @Override
+    public PageResult<List<PaperUserPapage>> queryPaperUser(PaperUserQuery query) {
+        return PageUtil.execute(()->paperUserMapper.queryPage(query),query);
     }
 }

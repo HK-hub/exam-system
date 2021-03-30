@@ -42,6 +42,8 @@ public interface ZjUserInfoMapper extends CommonBaseMapper<ZjUserInfo> {
 
     List<UserPageVO>queryPage(UserQuery query);
 
+    List<ZjUserInfo> queryListByClassId(Integer classId);
+
 
 
 

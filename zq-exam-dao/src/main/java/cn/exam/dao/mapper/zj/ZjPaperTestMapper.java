@@ -25,4 +25,9 @@ public interface ZjPaperTestMapper
         extends CommonBaseMapper<ZjPaperTest> {
 
     List<PaperTestVO> queryPaperTest(@Param("userId") String userId,@Param("paperId") Integer paperId);
+
+
+    List<Integer> queryIdByPaperId(Integer paperId);
+
+    List<ZjPaperTest> queryListById(@Param("ids")List<Integer> ids);
 }

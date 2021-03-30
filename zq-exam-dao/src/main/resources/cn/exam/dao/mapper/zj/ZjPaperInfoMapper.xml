@@ -7,14 +7,18 @@
             <if test="classId != null and classId != ''">
                 a.class_id =#{classId}
             </if>
+            <if test="userId != null and userId != ''">
+                d.user_id =#{userId}
+            </if>
         </where>
     </sql>
 
     <select id="queryPage" resultType="cn.exam.vo.PaperPageVO" parameterType="cn.exam.query.PaperQuery">
         SELECT a.paper_id paperId, a.paper_name paperName, a.subject_id ,b.subject_name subjectName ,a.difficulty ,a.class_id classId , c.class_name className ,a.paper_date paperDate ,a.exam_date examDate
-        , a.paper_num paperNum ,a.teach_name teachName ,a.create_time createTime
-         FROM zj_paper_info a LEFT JOIN zj_subject_info b ON a.subject_id = b.subject_id
-         LEFT JOIN zj_class_info c ON a.class_id = c.class_id
+        , a.paper_num paperNum ,a.teach_name teachName ,a.create_time createTime ,d.status ,d.fraction,d.user_id
+        FROM zj_paper_info a LEFT JOIN zj_subject_info b ON a.subject_id = b.subject_id
+        LEFT JOIN zj_class_info c ON a.class_id = c.class_id
+        LEFT JOIN zj_paper_user d ON a.paper_id = d.paper_id
         <include refid="baseCondition"></include>
     </select>
     <select id="queryTitlePaper" resultType="cn.exam.vo.PaperTitleVO">

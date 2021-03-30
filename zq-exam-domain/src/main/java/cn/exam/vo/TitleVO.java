@@ -67,4 +67,5 @@ public class TitleVO {
     private String createTime;
     private String subjectName;
     private Integer subjectId;
+    private String className;
 }

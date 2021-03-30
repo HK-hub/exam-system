@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.exam.dao.mapper.zj.ZjPaperUserMapper">
+
+
+    <select id="queryPaper" resultType="cn.exam.domain.zj.ZjPaperUser" parameterType="cn.exam.domain.zj.ZjPaperUser">
+        select id from zj_paper_user where paper_id=#{paperId} and user_id =#{userId} and status=0
+    </select>
+    <select id="queryPage" resultType="cn.exam.vo.PaperUserPapage" parameterType="cn.exam.query.PaperUserQuery">
+        SELECT a.paper_id , a.user_id ,a.fraction ,b.paper_name paperName, b.difficulty ,c.user_name userName,c.class_id,d.class_name className ,b.paper_score paperScore
+        FROM zj_paper_user a
+        LEFT JOIN zj_paper_info b ON a.paper_id = b.paper_id
+        LEFT JOIN zj_user_info c ON a.user_id = c.user_id
+        LEFT JOIN zj_class_info d ON c.class_id = d.class_id
+    </select>
+</mapper>

@@ -9,4 +9,14 @@
         LEFT JOIN zj_paper_info c ON a.paper_id = c.paper_id
         where a.user_id=#{userId} and a.paper_id =#{paperId}
     </select>
+    <select id="queryIdByPaperId" resultType="java.lang.Integer">
+        select id from zj_paper_test where paper_id =#{paperId}
+    </select>
+    <select id="queryListById" resultType="cn.exam.domain.zj.ZjPaperTest">
+        select id , answer ,title_answer  titleAnswer ,title_fraction titleFraction from zj_paper_test where
+        id IN
+        <foreach collection="ids" open="(" separator="," close=")" item="id">
+            #{id}
+        </foreach>
+    </select>
 </mapper>

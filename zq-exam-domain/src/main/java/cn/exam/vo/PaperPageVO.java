@@ -62,4 +62,8 @@ public class PaperPageVO {
      *
      */
     private String updateTime;
+
+    private Integer status;
+
+    private Integer fraction;
 }
