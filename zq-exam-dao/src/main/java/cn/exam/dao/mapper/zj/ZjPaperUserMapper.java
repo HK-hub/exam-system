@@ -10,6 +10,8 @@ package cn.exam.dao.mapper.zj;
 import cn.exam.dao.mapper.base.CommonBaseMapper;
 import cn.exam.domain.zj.ZjPaperUser;
 import cn.exam.query.PaperUserQuery;
+import cn.exam.vo.AchievementExportVO;
+import cn.exam.vo.PaperExportVO;
 import cn.exam.vo.PaperUserPapage;
 
 import java.util.List;
@@ -28,5 +30,16 @@ public interface ZjPaperUserMapper
     ZjPaperUser queryPaper(ZjPaperUser paperUser);
 
     List<PaperUserPapage> queryPage(PaperUserQuery query);
+
+    /**
+     * 成绩导出
+     */
+    List<AchievementExportVO> queryExport();
+
+
+    /**
+     * 导出
+     */
+    List<PaperExportVO> queryPaperExport(Integer paperId);
 
 }

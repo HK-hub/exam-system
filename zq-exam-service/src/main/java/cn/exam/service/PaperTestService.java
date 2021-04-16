@@ -6,6 +6,8 @@ import cn.exam.query.PaperUserQuery;
 import cn.exam.query.SubjectQuery;
 import cn.exam.so.PaperSuccessSO;
 import cn.exam.util.PageResult;
+import cn.exam.vo.AchievementExportVO;
+import cn.exam.vo.PaperExportVO;
 import cn.exam.vo.PaperTestLevel;
 import cn.exam.vo.PaperUserPapage;
 
@@ -25,6 +27,18 @@ public interface PaperTestService {
     void paperEnd(PaperSuccessSO successSO);
 
     PageResult<List<PaperUserPapage>> queryPaperUser(PaperUserQuery query);
+    List<String> queryAchievement();
+
+    /**
+     * 试卷导出
+     */
+    List<PaperExportVO> queryPaperExport(Integer paperId);
+
+    /**
+     * 成绩导出
+     * @return
+     */
+    List<AchievementExportVO> queryExport();
 
 
 

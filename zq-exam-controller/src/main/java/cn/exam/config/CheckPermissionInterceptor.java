@@ -35,7 +35,7 @@ public class CheckPermissionInterceptor extends HandlerInterceptorAdapter {
 //    @Autowired
 //    private TblUserService userService;
 
-    private String exceptUrl = "login.htm;getUserMenuInfo.htm;registerLogin.htm";
+    private String exceptUrl = "login.htm;getUserMenuInfo.htm;registerLogin.htm;paperExport.htm;queryExport.htm";
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {

@@ -13,4 +13,18 @@
         LEFT JOIN zj_user_info c ON a.user_id = c.user_id
         LEFT JOIN zj_class_info d ON c.class_id = d.class_id
     </select>
+    <select id="queryPaperExport" resultType="cn.exam.vo.PaperExportVO">
+        SELECT c.paper_name  paperName,b.title_name titleName, b.title_answer  titleAnswer, b.title_fraction titleFraction,
+            b.choice1 ,b.choice2,b.choice3 ,b.choice4
+            FROM  zj_subject_user_link a LEFT JOIN zj_title_info b ON a.title_id = b.title_id
+            LEFT JOIN zj_paper_info c ON a.paper_id = c.paper_id
+            where a.paper_id = #{paperId}
+    </select>
+    <select id="queryExport" resultType="cn.exam.vo.AchievementExportVO">
+     SELECT a.fraction ,b.paper_name paperName, b.difficulty ,c.user_name userName,d.class_name className ,b.paper_score paperScore
+        FROM zj_paper_user a
+        LEFT JOIN zj_paper_info b ON a.paper_id = b.paper_id
+        LEFT JOIN zj_user_info c ON a.user_id = c.user_id
+        LEFT JOIN zj_class_info d ON c.class_id = d.class_id
+    </select>
 </mapper>

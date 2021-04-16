@@ -22,4 +22,5 @@ public class TestLevelOne {
     private String choice2;
     private String choice3;
     private String choice4;
+    private String answer;
 }

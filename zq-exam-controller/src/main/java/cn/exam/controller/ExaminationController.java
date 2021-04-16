@@ -13,10 +13,7 @@ import cn.exam.util.DateUtil;
 import cn.exam.util.PageResult;
 import cn.exam.util.ResultDTO;
 import cn.exam.util.SystemCode;
-import cn.exam.vo.ExamPaperVO;
-import cn.exam.vo.PaperPageVO;
-import cn.exam.vo.TitleVO;
-import cn.exam.vo.UserVO;
+import cn.exam.vo.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.ObjectUtils;
@@ -91,7 +88,7 @@ public class ExaminationController extends BaseController {
     //试卷页面
     @RequestMapping("queryPaper.htm")
     public void queryPaper(Integer paperId,HttpServletResponse response){
-        ResultDTO<List<ExamPaperVO>> resultDTO = new ResultDTO<>();
+        ResultDTO<PaperTestLevel> resultDTO = new ResultDTO<>();
         resultDTO.setResult(examinationService.queryPaper(paperId));
         resultDTO.buildReturnCode(SystemCode.RET_CODE_SUCC, SystemCode.RET_MSG_SUCC);
         sendJsonSuccess(resultDTO, response);
@@ -104,6 +101,12 @@ public class ExaminationController extends BaseController {
         paperInfo.setTeachName(user.getUserName());
         examinationService.audioPaper(paperInfo);
         sendJsonSuccess( response);
+    }
+
+    @RequestMapping("updateTitleByList.htm")
+    public void updateTitleByList(String titleString,HttpServletResponse response){
+        examinationService.updateTitle(titleString);
+        sendJsonSuccess(response);
     }
 
 

@@ -10,10 +10,7 @@ import cn.exam.service.PaperTestService;
 import cn.exam.so.PaperSuccessSO;
 import cn.exam.util.PageResult;
 import cn.exam.util.PageUtil;
-import cn.exam.vo.PaperTestLevel;
-import cn.exam.vo.PaperTestVO;
-import cn.exam.vo.PaperUserPapage;
-import cn.exam.vo.TestLevelOne;
+import cn.exam.vo.*;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -154,5 +151,39 @@ public class PaperTestServiceImpl implements PaperTestService {
     @Override
     public PageResult<List<PaperUserPapage>> queryPaperUser(PaperUserQuery query) {
         return PageUtil.execute(()->paperUserMapper.queryPage(query),query);
+    }
+
+    @Override
+    public List<String> queryAchievement() {
+        PaperUserQuery query = new PaperUserQuery();
+        List<String> strings = new ArrayList<>();
+        List<PaperUserPapage> paperUserPapages = paperUserMapper.queryPage(query);
+        List<PaperUserPapage> collect = paperUserPapages.stream().filter(f -> f.getFraction() != null).collect(Collectors.toList());
+        List<PaperUserPapage> collect1 = collect.stream().filter(f -> f.getFraction() <= 30).collect(Collectors.toList());
+        strings.add(String.valueOf(collect1.size()));
+        //大于30 小于等于60
+        List<PaperUserPapage> collect2 = collect.stream().filter(f -> f.getFraction() >30).collect(Collectors.toList());
+        List<PaperUserPapage> collect3 = collect2.stream().filter(f -> f.getFraction() <=60).collect(Collectors.toList());
+        strings.add(String.valueOf(collect3.size()));
+        //大于60小于等于80
+        List<PaperUserPapage> collect4 = collect.stream().filter(f -> f.getFraction() >60).collect(Collectors.toList());
+        List<PaperUserPapage> collect5 = collect4.stream().filter(f -> f.getFraction() <=80).collect(Collectors.toList());
+        strings.add(String.valueOf(collect5.size()));
+        //100
+        List<PaperUserPapage> collect6 = collect.stream().filter(f -> f.getFraction() >80).collect(Collectors.toList());
+        List<PaperUserPapage> collect7 = collect6.stream().filter(f -> f.getFraction() <=100).collect(Collectors.toList());
+        strings.add(String.valueOf(collect7.size()));
+        return strings;
+    }
+
+    @Override
+    public List<PaperExportVO> queryPaperExport(Integer paperId) {
+        return paperUserMapper.queryPaperExport(paperId);
+    }
+
+    @Override
+    public List<AchievementExportVO> queryExport(){
+        return paperUserMapper.queryExport();
+
     }
 }

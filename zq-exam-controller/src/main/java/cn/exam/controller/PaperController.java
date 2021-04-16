@@ -16,10 +16,7 @@ import cn.exam.service.ExaminationService;
 import cn.exam.service.PaperTestService;
 import cn.exam.so.PaperSO;
 import cn.exam.so.PaperSuccessSO;
-import cn.exam.util.DateUtil;
-import cn.exam.util.PageResult;
-import cn.exam.util.ResultDTO;
-import cn.exam.util.SystemCode;
+import cn.exam.util.*;
 import cn.exam.vo.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -29,6 +26,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -119,6 +117,31 @@ public class PaperController extends BaseController {
         resultDTO.setResult(listPageResult);
         resultDTO.buildReturnCode(SystemCode.RET_CODE_SUCC, SystemCode.RET_MSG_SUCC);
         sendJsonSuccessPage(resultDTO, response);
+    }
+
+
+    @RequestMapping("queryAchievement.htm")
+    public void queryAchieve(HttpServletResponse response){
+        ResultDTO<List<String> > resultDTO = new ResultDTO<>();
+        resultDTO.setResult(testService.queryAchievement());
+        resultDTO.buildReturnCode(SystemCode.RET_CODE_SUCC, SystemCode.RET_MSG_SUCC);
+        sendJsonSuccess(resultDTO, response);
+    }
+
+
+    @RequestMapping("paperExport.htm")
+    public void paperExport(Integer paperId,HttpServletResponse response) throws IOException {
+        List<PaperExportVO> paperExportVOS = testService.queryPaperExport(paperId);
+        PaperExportVO paperExportVO = paperExportVOS.get(0);
+        String fileName = paperExportVO.getPaperName()+".xlsx";
+        EasyExcelUtil.writeWeb(fileName, PaperExportVO.class, paperExportVOS, response);
+    }
+
+    @RequestMapping("queryExport.htm")
+    public void quertExport(HttpServletResponse response) throws IOException {
+        List<AchievementExportVO> achievementExportVOS = testService.queryExport();
+        String fileName = "成绩单.xlsx";
+        EasyExcelUtil.writeWeb(fileName, AchievementExportVO.class, achievementExportVOS, response);
     }
 
 

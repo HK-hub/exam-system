@@ -45,7 +45,7 @@ public class PaperPageVO {
     /**
      *
      */
-    private Integer paperNum;
+    private Integer paperScore;
     /**
      *
      */

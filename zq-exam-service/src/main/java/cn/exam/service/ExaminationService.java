@@ -6,10 +6,7 @@ import cn.exam.query.PaperQuery;
 import cn.exam.query.TitlePageQuery;
 import cn.exam.util.PageResult;
 import cn.exam.util.PageUtil;
-import cn.exam.vo.ExamPaperVO;
-import cn.exam.vo.PaperPageVO;
-import cn.exam.vo.TitleVO;
-import cn.exam.vo.UserVO;
+import cn.exam.vo.*;
 
 import java.util.List;
 
@@ -35,9 +32,12 @@ public interface ExaminationService {
     void updateTitle(ZjTitleInfo info);
 
     //试卷页面
-    List<ExamPaperVO> queryPaper(Integer paperId);
+    PaperTestLevel queryPaper(Integer paperId);
     //自动组卷
     void audioPaper(ZjPaperInfo paperInfo);
+
+    //修改试题
+    void updateTitle(String titleString);
 
 
 
