@@ -18,12 +18,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
-/**
- * @File: UserUtil
- * @Author: 余生
- * @Date: 2018/5/16 15:36
- * @Description: 用户工具类
- */
+
 @Component
 public class UserUtil {
     @Autowired

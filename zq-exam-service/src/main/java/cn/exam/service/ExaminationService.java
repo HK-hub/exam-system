@@ -10,15 +10,14 @@ import cn.exam.vo.*;
 
 import java.util.List;
 
-/**
- * @author YS
- * @version 1.0
- * @date 2021-02-26 14:03
- */
+
 public interface ExaminationService {
 
     //试卷管理分页
     PageResult<List<PaperPageVO>> queryPage (PaperQuery query);
+
+    //试卷管理分页
+    PageResult<List<PaperPageVO>> queryManagerPage (PaperQuery query);
 
 
     PageResult<List<TitleVO>> queryPage(TitlePageQuery query);

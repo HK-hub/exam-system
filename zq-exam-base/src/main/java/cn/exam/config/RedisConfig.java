@@ -10,7 +10,7 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 import org.springframework.stereotype.Component;
 
 /**
- * @author YS
+ * @author ZH
  * @version 1.0
  * @date 2020/3/19 14:37
  */

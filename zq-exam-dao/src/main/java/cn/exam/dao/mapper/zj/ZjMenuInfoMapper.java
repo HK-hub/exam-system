@@ -15,12 +15,7 @@ import cn.exam.domain.zj.ZjMenuInfo;
 import java.util.List;
 
 
-/**
- * @File: ZjMenuInfo
- * @Author: ys
- * @Date: 2020/5/20 05:20
- * @Description:
- */
+
 public interface ZjMenuInfoMapper
         extends CommonBaseMapper<ZjMenuInfo> {
     List<ZjMenuInfo> queryPage(ZjMenuQuery query);

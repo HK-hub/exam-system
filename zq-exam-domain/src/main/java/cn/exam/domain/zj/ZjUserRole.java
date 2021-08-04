@@ -8,8 +8,6 @@ import javax.persistence.Table;
 import java.io.Serializable;
 
 /**
- * @File: ZjUserRole
- * @Author: ys
  * @Date: 2021-01-25 15:39:17
  * @Description:
  */

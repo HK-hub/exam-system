@@ -15,12 +15,7 @@ import org.apache.ibatis.annotations.Param;
 import java.util.List;
 
 
-/**
- * @File: ZjPaperTest
- * @Author: ys
- * @Date: 2020/5/20 05:20
- * @Description:
- */
+
 public interface ZjPaperTestMapper
         extends CommonBaseMapper<ZjPaperTest> {
 

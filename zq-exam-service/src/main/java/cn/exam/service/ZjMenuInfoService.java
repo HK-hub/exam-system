@@ -8,11 +8,6 @@ import cn.exam.vo.RoleMenuVO;
 
 import java.util.List;
 
-/**
- * @author YS
- * @version 1.0
- * @date 2021-02-21 17:31
- */
 public interface ZjMenuInfoService {
 
     PageResult<List<ZjMenuInfo>> queryMenuInfoPage(ZjMenuQuery query);

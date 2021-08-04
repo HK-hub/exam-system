@@ -5,11 +5,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ObjectUtils;
+import redis.clients.jedis.Jedis;
+import redis.clients.jedis.JedisShardInfo;
 
 import java.util.concurrent.TimeUnit;
 
 /**
- * @author YS
+ * @author ZH
  * @version 1.0
  * @date 2020/3/19 14:56
  */
@@ -21,7 +23,6 @@ public class RedisUtil {
 
 
     public String getKey(String key) {
-        System.out.println(key);
         String str = null;
         Object s = redisTemplate.opsForValue().get(key);
         if (!ObjectUtils.isEmpty(s)) {

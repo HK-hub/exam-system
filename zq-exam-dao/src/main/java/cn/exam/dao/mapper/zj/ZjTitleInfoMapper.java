@@ -16,12 +16,7 @@ import org.apache.ibatis.annotations.Param;
 import java.util.List;
 
 
-/**
- * @File: ZjTitleInfo
- * @Author: ys
- * @Date: 2020/5/20 05:20
- * @Description:
- */
+
 public interface ZjTitleInfoMapper
         extends CommonBaseMapper<ZjTitleInfo> {
 
@@ -30,7 +25,7 @@ public interface ZjTitleInfoMapper
 
     TitleVO queryTitleInfo(Integer titleId);
     //classId 查询试题
-    List<ZjTitleInfo> queryTitleByClassId(Integer classId);
+    List<ZjTitleInfo> queryTitleByClassId(@Param("classId") Integer classId,@Param("subjectId")Integer subjectId);
     //在一个难度区间
     List<ZjTitleInfo> queryTitleByDifficulty(@Param("difficulty1") Integer difficulty1,@Param("difficulty2") Integer difficulty2,@Param("classId") Integer classId);
 

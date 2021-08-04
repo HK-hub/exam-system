@@ -8,7 +8,7 @@ spring:
     encoding.enable: true
     encoding.force: true
   datasource:
-    url: jdbc:mysql://106.14.159.41:3306/cat?useUnicode=true&characterEncoding=utf-8
+    url: jdbc:mysql://106.14.159.41:3306/cat?useUnicode=true&characterEncoding=utf-8&useSSL=false
     username: root
     password: root123
     driverClass: com.mysql.jdbc.Driver

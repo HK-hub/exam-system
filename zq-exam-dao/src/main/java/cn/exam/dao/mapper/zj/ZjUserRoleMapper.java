@@ -11,12 +11,7 @@ import cn.exam.dao.mapper.base.CommonBaseMapper;
 import cn.exam.domain.zj.ZjUserRole;
 
 
-/**
- * @File: ZjUserRole
- * @Author: ys
- * @Date: 2020/5/20 05:20
- * @Description:
- */
+
 public interface ZjUserRoleMapper
         extends CommonBaseMapper<ZjUserRole> {
 }

@@ -213,4 +213,5 @@ public class LoginController extends BaseController {
         userInfoMapper.updateByPrimaryKeySelective(userInfo);
         sendJsonSuccess(response);
     }
+
 }

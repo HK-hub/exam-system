@@ -10,19 +10,13 @@ package cn.exam.dao.mapper.zj;
 import cn.exam.dao.mapper.base.CommonBaseMapper;
 import cn.exam.domain.zj.ZjPaperInfo;
 import cn.exam.query.PaperQuery;
-import cn.exam.vo.ExamPaperVO;
 import cn.exam.vo.PaperPageVO;
 import cn.exam.vo.PaperTitleVO;
 
 import java.util.List;
 
 
-/**
- * @File: ZjPaperInfo
- * @Author: ys
- * @Date: 2020/5/20 05:20
- * @Description:
- */
+
 public interface ZjPaperInfoMapper
         extends CommonBaseMapper<ZjPaperInfo> {
 
@@ -32,6 +26,12 @@ public interface ZjPaperInfoMapper
      */
     List<PaperPageVO> queryPage(PaperQuery query);
 
+    /**
+     * 教师管理员  试卷页面
+     * @param query
+     * @return
+     */
+    List<PaperPageVO> queryManagerPage(PaperQuery query);
 
     List<PaperTitleVO> queryTitlePaper(Integer paperId);
 }

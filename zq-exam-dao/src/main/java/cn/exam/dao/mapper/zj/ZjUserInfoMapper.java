@@ -21,12 +21,7 @@ import org.springframework.test.context.jdbc.Sql;
 import java.util.List;
 
 
-/**
- * @File: ZjUserInfo
- * @Author: ys
- * @Date: 2020/5/20 05:20
- * @Description:
- */
+
 public interface ZjUserInfoMapper extends CommonBaseMapper<ZjUserInfo> {
 //    @Select("select  user_id userId,password,user_name userName from zj_user_info where user_id =#{userId} and is_delete=0")
     UserVO queryShiroUserInfoByUserName(@Param("userId") String userId);

@@ -14,12 +14,7 @@ import cn.exam.query.SubjectQuery;
 import java.util.List;
 
 
-/**
- * @File: ZjSubjectInfo
- * @Author: ys
- * @Date: 2020/5/20 05:20
- * @Description:
- */
+
 public interface ZjSubjectInfoMapper
         extends CommonBaseMapper<ZjSubjectInfo> {
 

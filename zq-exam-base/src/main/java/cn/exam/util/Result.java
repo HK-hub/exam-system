@@ -2,9 +2,6 @@ package cn.exam.util;
 
 /**
  * 返回的结果信息
- * @File Result.java
- * @Author
- * @Date 2017年5月10日 下午8:40:27
  * @Descrption
  */
 public class Result {

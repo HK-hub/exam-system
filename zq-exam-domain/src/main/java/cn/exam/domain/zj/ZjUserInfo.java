@@ -9,8 +9,6 @@ import javax.persistence.Table;
 import java.util.List;
 
 /**
- * @File: ZjUserInfo
- * @Author: ys
  * @Date: 2021-01-25 15:39:00
  * @Description:
  */

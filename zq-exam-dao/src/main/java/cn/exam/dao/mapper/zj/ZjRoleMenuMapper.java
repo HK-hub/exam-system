@@ -15,12 +15,7 @@ import org.apache.ibatis.annotations.Param;
 import java.util.List;
 
 
-/**
- * @File: ZjRoleMenu
- * @Author: ys
- * @Date: 2020/5/20 05:20
- * @Description:
- */
+
 public interface ZjRoleMenuMapper
         extends CommonBaseMapper<ZjRoleMenu> {
 

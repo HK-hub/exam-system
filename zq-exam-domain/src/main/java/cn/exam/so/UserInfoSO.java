@@ -3,7 +3,6 @@ package cn.zq.exam.so;
 import lombok.Data;
 
 /**
- * @author YS
  * @version 1.0  注册
  * @date 2021-02-06 9:30
  */

@@ -7,7 +7,6 @@ import java.lang.annotation.Target;
 
 /**
  * @File: RequirePermission
- * @Author: ys
  * @Date: 2018/10/11 15:20
  * @Description:
  */

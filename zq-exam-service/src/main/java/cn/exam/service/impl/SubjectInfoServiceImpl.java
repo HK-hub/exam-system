@@ -12,11 +12,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-/**
- * @author YS
- * @version 1.0
- * @date 2021-03-02 18:11
- */
 @Service
 public class SubjectInfoServiceImpl implements SubjectInfoService {
     @Autowired

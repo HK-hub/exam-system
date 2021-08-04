@@ -14,12 +14,7 @@ import cn.exam.domain.zj.ZjRole;
 import java.util.List;
 
 
-/**
- * @File: ZjRole
- * @Author: ys
- * @Date: 2020/5/20 05:20
- * @Description:
- */
+
 public interface ZjRoleMapper
         extends CommonBaseMapper<ZjRole> {
     List<ZjRole> queryPage(RoleQuery query);

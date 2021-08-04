@@ -14,12 +14,6 @@ import cn.exam.query.ClassQuery;
 import java.util.List;
 
 
-/**
- * @File: ZjClassInfo
- * @Author: ys
- * @Date: 2020/5/20 05:20
- * @Description:
- */
 public interface ZjClassInfoMapper
         extends CommonBaseMapper<ZjClassInfo> {
 

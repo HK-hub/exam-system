@@ -23,8 +23,6 @@ import java.util.Map;
 
 /**
  * 类BaseController.java的实现描述：controller公用代码
- *
- * @author YS
  */
 public class BaseController {
 

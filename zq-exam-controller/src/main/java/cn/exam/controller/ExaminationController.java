@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @author YS
+ *
  * @version 1.0
  * @date 2021-02-26 14:30
  */
@@ -49,7 +49,7 @@ public class ExaminationController extends BaseController {
     @RequestMapping("queryPaperPage.htm")
     public void queryTitlePage(HttpServletResponse response, PaperQuery query) {
         ResultDTO<PageResult<List<PaperPageVO>>> resultDTO = new ResultDTO<>();
-        PageResult<List<PaperPageVO>> listPageResult = examinationService.queryPage(query);
+        PageResult<List<PaperPageVO>> listPageResult = examinationService.queryManagerPage(query);
         resultDTO.setResult(listPageResult);
         resultDTO.buildReturnCode(SystemCode.RET_CODE_SUCC, SystemCode.RET_MSG_SUCC);
         sendJsonSuccessPage(resultDTO, response);

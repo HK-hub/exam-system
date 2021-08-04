@@ -15,12 +15,7 @@ import java.util.*;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
-/**
- * @File: AutoCodeUtil
- * @Author: ys
- * @Date: 2020/5/20 05:20
- * @Description: 代码自动生成工具类
- */
+
 public class AutoCodeUtil {
     private static final String DRIVE = "com.mysql.jdbc.Driver";
 

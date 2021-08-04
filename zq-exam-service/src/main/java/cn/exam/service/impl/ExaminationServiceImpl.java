@@ -1,6 +1,5 @@
 package cn.exam.service.impl;
 
-import ch.qos.logback.core.joran.util.beans.BeanUtil;
 import cn.exam.dao.mapper.zj.*;
 import cn.exam.domain.zj.*;
 import cn.exam.query.PaperQuery;
@@ -18,11 +17,11 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * @author YS
  * @version 1.0
  * @date 2021-02-26 14:04
  */
@@ -47,6 +46,11 @@ public class ExaminationServiceImpl implements ExaminationService {
     @Override
     public PageResult<List<PaperPageVO>> queryPage(PaperQuery query) {
         return PageUtil.execute(() -> paperInfoMapper.queryPage(query), query);
+    }
+
+    @Override
+    public PageResult<List<PaperPageVO>> queryManagerPage(PaperQuery query) {
+        return PageUtil.execute(() -> paperInfoMapper.queryManagerPage(query), query);
     }
 
     @Override
@@ -143,15 +147,22 @@ public class ExaminationServiceImpl implements ExaminationService {
         return testLevel;
     }
 
+    /**
+     * 组卷
+     **/
+
     @Override
     public void audioPaper(ZjPaperInfo paperInfo) {
         String currentDateTime = DateUtil.getCurrentDateTime();
-
-        List<ZjTitleInfo> zjTitleInfos = titleInfoMapper.queryTitleByClassId(paperInfo.getClassId());
+/**
+ * 通过班级ID查询班级与多少试题
+ **/
+        List<ZjTitleInfo> zjTitleInfos = titleInfoMapper.queryTitleByClassId(paperInfo.getClassId(),paperInfo.getSubjectId());
         if (zjTitleInfos.size() == 0) {
             throw new ExpressException(SystemCode.SERVICE_FAILD_CODE, "该班级试题不够");
         }
         int sum = zjTitleInfos.stream().mapToInt(ZjTitleInfo::getTitleFraction).sum();
+        /**jdk8 Stream流处理计算出这个集合里所有的分数**/
         if (sum < 100) {
             throw new ExpressException(SystemCode.SERVICE_FAILD_CODE, "该班级试题分数不够100分");
         }
@@ -163,20 +174,29 @@ public class ExaminationServiceImpl implements ExaminationService {
         List<ZjTitleInfo> zjTitleInfoList = new ArrayList<>();
         //过滤所有单选
         List<ZjTitleInfo> collect = zjTitleInfos1.stream().filter(f -> f.getTitleStatus() == 0).collect(Collectors.toList());
+        /**
+         * 初始题库每次查出来的题目乱序，如果选择题只有10个那么  10道题乱序。如果20道  20题乱序然后抽取
+         */
+        System.out.println(JSON.toJSONString(collect));
+        Collections.shuffle(collect);
+//        System.out.println("----------------------------------------");
+//        System.out.println(JSON.toJSONString(collect));
         if (collect.size() <= 10) {
-            collect.forEach(f->{
+            collect.forEach(f -> {
                 ZjTitleInfo titleInfo = new ZjTitleInfo();
                 BeanUtils.copyProperties(f, titleInfo);
                 zjTitleInfoList.add(titleInfo);
             });
         } else {
             List<ZjTitleInfo> zjTitleInfoList1 = collect.subList(0, 10);
-            zjTitleInfoList1.forEach(f->{
+            zjTitleInfoList1.forEach(f -> {
                 ZjTitleInfo titleInfo = new ZjTitleInfo();
                 BeanUtils.copyProperties(f, titleInfo);
                 zjTitleInfoList.add(titleInfo);
             });
         }
+        //让选择题每次生成的题目排列随机
+//        Collections.shuffle(zjTitleInfoList);
         //填空或者主观
         List<ZjTitleInfo> collect1 = zjTitleInfos1.stream().filter(f -> f.getTitleStatus() == 1 || f.getTitleStatus() == 2).collect(Collectors.toList());
         for (ZjTitleInfo titleInfo : collect1) {
@@ -188,7 +208,7 @@ public class ExaminationServiceImpl implements ExaminationService {
             }
         }
         int sum1 = zjTitleInfoList.stream().mapToInt(ZjTitleInfo::getTitleFraction).sum();
-        if (sum1<100){
+        if (sum1 < 100) {
             throw new ExpressException(SystemCode.SERVICE_FAILD_CODE, "分数不足不能组卷");
         }
         paperInfo.setPaperScore(result1);

@@ -17,12 +17,7 @@ import cn.exam.vo.PaperUserPapage;
 import java.util.List;
 
 
-/**
- * @File: ZjPaperUser
- * @Author: ys
- * @Date: 2020/5/20 05:20
- * @Description:
- */
+
 public interface ZjPaperUserMapper
         extends CommonBaseMapper<ZjPaperUser> {
 

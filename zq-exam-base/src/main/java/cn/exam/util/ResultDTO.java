@@ -9,7 +9,6 @@ import java.io.Serializable;
 
 /**
  * 封装业务成返回数据
- * @author YS
  *
  * @param <T>
  */
