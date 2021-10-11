@@ -28,7 +28,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.TreeSet;
+import java.util.stream.Collectors;
 
 /**
  * @author YS
@@ -121,13 +124,48 @@ public class PaperController extends BaseController {
 
 
     @RequestMapping("queryAchievement.htm")
-    public void queryAchieve(HttpServletResponse response){
+    public void queryAchieve(HttpServletResponse response,PaperUserQuery query){
         ResultDTO<List<String> > resultDTO = new ResultDTO<>();
-        resultDTO.setResult(testService.queryAchievement());
+        resultDTO.setResult(testService.queryAchievement(query));
         resultDTO.buildReturnCode(SystemCode.RET_CODE_SUCC, SystemCode.RET_MSG_SUCC);
         sendJsonSuccess(resultDTO, response);
     }
 
+    /**
+     * 班级下拉选
+     * @param response
+     */
+    @RequestMapping("queryClassIdList.htm")
+    public void queryClassIdList(HttpServletResponse response){
+        ResultDTO<List<PaperUserQuery> > resultDTO = new ResultDTO<>();
+        List<PaperUserQuery> queries = testService.queryClassList();
+        ArrayList<PaperUserQuery> infos2 =
+                queries.stream()
+                        .collect(Collectors.collectingAndThen(Collectors
+                                .toCollection(() -> new TreeSet<>(Comparator
+                                        .comparing(PaperUserQuery::getClassId))), ArrayList::new));
+        resultDTO.setResult(infos2);
+        resultDTO.buildReturnCode(SystemCode.RET_CODE_SUCC, SystemCode.RET_MSG_SUCC);
+        sendJsonSuccess(resultDTO, response);
+    }
+
+    /**
+     * 试卷下拉选和班级下拉选
+     * @param response
+     */
+    @RequestMapping("queryPaperIdList.htm")
+    public void queryPaperIdList(HttpServletResponse response){
+        ResultDTO<List<PaperUserQuery> > resultDTO = new ResultDTO<>();
+        List<PaperUserQuery> queries = testService.queryClassList();
+        ArrayList<PaperUserQuery> infos2 =
+                queries.stream()
+                        .collect(Collectors.collectingAndThen(Collectors
+                                .toCollection(() -> new TreeSet<>(Comparator
+                                        .comparing(PaperUserQuery::getPaperId))), ArrayList::new));
+        resultDTO.setResult(infos2);
+        resultDTO.buildReturnCode(SystemCode.RET_CODE_SUCC, SystemCode.RET_MSG_SUCC);
+        sendJsonSuccess(resultDTO, response);
+    }
 
     @RequestMapping("paperExport.htm")
     public void paperExport(Integer paperId,HttpServletResponse response) throws IOException {

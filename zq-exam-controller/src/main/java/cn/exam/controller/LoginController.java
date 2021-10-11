@@ -79,7 +79,7 @@ public class LoginController extends BaseController {
             String token = UUID.randomUUID().toString();
             user1.setToken(token);
             resultDTO.setCode(SystemCode.RET_CODE_SUCC);
-            resultDTO.setResult(user1);
+            resultDTO.setResult(user1);//LOGIN_USER_INFO:UUID.randomUUID().toString()
             redisUtil.setKeyTime(RedisKeyEnum.USER.getCode() + ":" + token, JSON.toJSONString(user1), Constant.KEY_IN_REDIS_TIME);
 
         } catch (IncorrectCredentialsException e) {

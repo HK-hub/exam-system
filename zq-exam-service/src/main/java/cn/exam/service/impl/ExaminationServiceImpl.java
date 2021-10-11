@@ -2,6 +2,7 @@ package cn.exam.service.impl;
 
 import cn.exam.dao.mapper.zj.*;
 import cn.exam.domain.zj.*;
+import cn.exam.query.PaperByUserIdQuery;
 import cn.exam.query.PaperQuery;
 import cn.exam.query.TitlePageQuery;
 import cn.exam.service.ExaminationService;
@@ -18,6 +19,7 @@ import org.springframework.util.ObjectUtils;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -43,6 +45,85 @@ public class ExaminationServiceImpl implements ExaminationService {
     private ZjPaperUserMapper paperUserMapper;
 
 
+    @Override
+    public PageResult<List<PaperByUserIdVO>> queryPaperByUserId(PaperByUserIdQuery query) {
+        return PageUtil.execute(() -> paperUserMapper.queryPaperByUserId(query), query);
+    }
+
+    @Override
+    public PaperTestLevel queryPaperCompleted(Integer paperId, String userId) {
+        PaperTestLevel testLevel = new PaperTestLevel();
+        List<TestLevelOne> oneList2 = new ArrayList<>();
+        List<TestLevelOne> oneList3 = new ArrayList<>();
+        List<PaperTitleVO> paperTitleVOS = paperInfoMapper.queryTitlePaper(paperId);
+        List<ZjPaperTest> zjPaperTests = paperTestMapper.queryPaperTestByUserIdAndPaperId(paperId, userId);
+        HashMap<Integer,String> map = new HashMap<>();
+        zjPaperTests.forEach(f->{
+            map.put(f.getTitleId(),f.getAnswer());
+        });
+
+        //分析试卷
+        List<PaperTitleVO> collect = paperTitleVOS.stream().filter(f -> f.getTitleStatus() == 0).collect(Collectors.toList());
+        List<PaperTitleVO> collect1 = paperTitleVOS.stream().filter(f -> f.getTitleStatus() == 1).collect(Collectors.toList());
+        List<PaperTitleVO> collect2 = paperTitleVOS.stream().filter(f -> f.getTitleStatus() == 2).collect(Collectors.toList());
+        //单选题总分数
+        if (!ObjectUtils.isEmpty(collect)) {
+            List<TestLevelOne> oneList1 = new ArrayList<>();
+            for (PaperTitleVO titleVO : collect) {
+                TestLevelOne levelOne = new TestLevelOne();
+                levelOne.setTitleName(titleVO.getTitleName());
+                levelOne.setId(titleVO.getTitleId());
+                levelOne.setTitleFraction(titleVO.getFraction());
+                levelOne.setChoice1(titleVO.getChoice1());
+                levelOne.setChoice2(titleVO.getChoice2());
+                levelOne.setChoice3(titleVO.getChoice3());
+                levelOne.setChoice4(titleVO.getChoice4());
+                levelOne.setAnswer(titleVO.getTitleAnswer());
+                map.forEach((k,v)->{
+                    if (k.equals(titleVO.getTitleId())){
+                        levelOne.setStudentAnswers(v);
+                    }
+                });
+                oneList1.add(levelOne);
+            }
+            testLevel.setOneList1(oneList1);
+        }
+        //填空
+        if (!ObjectUtils.isEmpty(collect1)) {
+            for (PaperTitleVO titleVO : collect1) {
+                TestLevelOne levelOne = new TestLevelOne();
+                levelOne.setTitleName(titleVO.getTitleName());
+                levelOne.setId(titleVO.getTitleId());
+                levelOne.setTitleFraction(titleVO.getFraction());
+                levelOne.setAnswer(titleVO.getTitleAnswer());
+                map.forEach((k,v)->{
+                    if (k.equals(titleVO.getTitleId())){
+                        levelOne.setStudentAnswers(v);
+                    }
+                });
+                oneList2.add(levelOne);
+            }
+            testLevel.setOneList2(oneList2);
+        }
+        //主观
+        if (!ObjectUtils.isEmpty(collect2)) {
+            for (PaperTitleVO titleVO : collect2) {
+                TestLevelOne levelOne = new TestLevelOne();
+                levelOne.setTitleName(titleVO.getTitleName());
+                levelOne.setId(titleVO.getTitleId());
+                levelOne.setTitleFraction(titleVO.getFraction());
+                levelOne.setAnswer(titleVO.getTitleAnswer());
+                map.forEach((k,v)->{
+                    if (k.equals(titleVO.getTitleId())){
+                        levelOne.setStudentAnswers(v);
+                    }
+                });
+                oneList3.add(levelOne);
+            }
+            testLevel.setOneList3(oneList3);
+        }
+        return testLevel;
+    }
     @Override
     public PageResult<List<PaperPageVO>> queryPage(PaperQuery query) {
         return PageUtil.execute(() -> paperInfoMapper.queryPage(query), query);

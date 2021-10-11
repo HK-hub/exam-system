@@ -25,4 +25,6 @@ public interface ZjPaperTestMapper
     List<Integer> queryIdByPaperId(Integer paperId);
 
     List<ZjPaperTest> queryListById(@Param("ids")List<Integer> ids);
+
+    List<ZjPaperTest> queryPaperTestByUserIdAndPaperId(@Param("paperId") Integer paperId, @Param("userId") String userId);
 }

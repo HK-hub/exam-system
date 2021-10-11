@@ -14,6 +14,8 @@ import cn.exam.vo.*;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.support.odps.udf.CodecCheck;
+import lombok.Builder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -64,11 +66,11 @@ public class PaperTestServiceImpl implements PaperTestService {
         testLevel.setTitleNum1(collect1.size());
         testLevel.setTitleNum2(collect2.size());
         List<TestLevelOne> oneList1 = new ArrayList<>();
-        List<TestLevelOne> oneList2 =new ArrayList<>();
+        List<TestLevelOne> oneList2 = new ArrayList<>();
         List<TestLevelOne> oneList3 = new ArrayList<>();
-        paperTestVOS.forEach(f->{
+        paperTestVOS.forEach(f -> {
             //单选
-            if (f.getTitleStatus()==0){
+            if (f.getTitleStatus() == 0) {
                 TestLevelOne levelOne = new TestLevelOne();
                 levelOne.setTitleName(f.getTitleName());
                 levelOne.setTitleFraction(f.getTitleFraction());
@@ -78,13 +80,13 @@ public class PaperTestServiceImpl implements PaperTestService {
                 levelOne.setChoice4(f.getChoice4());
                 levelOne.setId(f.getId());
                 oneList1.add(levelOne);
-            }else if(f.getTitleStatus()==1){
+            } else if (f.getTitleStatus() == 1) {
                 TestLevelOne levelOne = new TestLevelOne();
                 levelOne.setTitleName(f.getTitleName());
                 levelOne.setTitleFraction(f.getTitleFraction());
                 levelOne.setId(f.getId());
                 oneList2.add(levelOne);
-            }else if (f.getTitleStatus()==2){
+            } else if (f.getTitleStatus() == 2) {
                 TestLevelOne levelOne = new TestLevelOne();
                 levelOne.setTitleName(f.getTitleName());
                 levelOne.setId(f.getId());
@@ -109,28 +111,28 @@ public class PaperTestServiceImpl implements PaperTestService {
         String str = "[" + paperList + "]";
         JSONArray objects = JSON.parseArray(str);
         List<Integer> ids = new ArrayList<>();
-        for (Object obj : objects){
+        for (Object obj : objects) {
             ZjPaperTest paperTest = new ZjPaperTest();
             JSONObject object = JSON.parseObject(obj.toString());
             Object id = object.get("id");
             Object val = object.get("val");
-            if (!ObjectUtils.isEmpty(id)){
+            if (!ObjectUtils.isEmpty(id)) {
                 paperTest.setId(Integer.valueOf(id.toString()));
                 ids.add(Integer.valueOf(id.toString()));
             }
-            if (!ObjectUtils.isEmpty(val)){
+            if (!ObjectUtils.isEmpty(val)) {
                 paperTest.setAnswer(val.toString());
                 paperTestMapper.updateByPrimaryKeySelective(paperTest);
             }
         }
         List<ZjPaperTest> paperTests = paperTestMapper.queryListById(ids);
         Integer fraction = 0;
-        for (ZjPaperTest f :paperTests){
+        for (ZjPaperTest f : paperTests) {
             String all = f.getTitleAnswer().replaceAll(" ", "");
-            if (!ObjectUtils.isEmpty(f.getAnswer())){
+            if (!ObjectUtils.isEmpty(f.getAnswer())) {
                 String all1 = f.getAnswer().replaceAll(" ", "");
-                if (all.equals(all1)){
-                    fraction=fraction+f.getTitleFraction();
+                if (all.equals(all1)) {
+                    fraction = fraction + f.getTitleFraction();
                 }
             }
         }
@@ -149,30 +151,46 @@ public class PaperTestServiceImpl implements PaperTestService {
 
     @Override
     public PageResult<List<PaperUserPapage>> queryPaperUser(PaperUserQuery query) {
-        return PageUtil.execute(()->paperUserMapper.queryPage(query),query);
+        return PageUtil.execute(() -> paperUserMapper.queryPage(query), query);
     }
 
     @Override
-    public List<String> queryAchievement() {
-        PaperUserQuery query = new PaperUserQuery();
+    public List<String> queryAchievement(PaperUserQuery query) {
         List<String> strings = new ArrayList<>();
         List<PaperUserPapage> paperUserPapages = paperUserMapper.queryPage(query);
         List<PaperUserPapage> collect = paperUserPapages.stream().filter(f -> f.getFraction() != null).collect(Collectors.toList());
         List<PaperUserPapage> collect1 = collect.stream().filter(f -> f.getFraction() <= 30).collect(Collectors.toList());
         strings.add(String.valueOf(collect1.size()));
         //大于30 小于等于60
-        List<PaperUserPapage> collect2 = collect.stream().filter(f -> f.getFraction() >30).collect(Collectors.toList());
-        List<PaperUserPapage> collect3 = collect2.stream().filter(f -> f.getFraction() <=60).collect(Collectors.toList());
+        List<PaperUserPapage> collect2 = collect.stream().filter(f -> f.getFraction() > 30).collect(Collectors.toList());
+        List<PaperUserPapage> collect3 = collect2.stream().filter(f -> f.getFraction() <= 60).collect(Collectors.toList());
         strings.add(String.valueOf(collect3.size()));
         //大于60小于等于80
-        List<PaperUserPapage> collect4 = collect.stream().filter(f -> f.getFraction() >60).collect(Collectors.toList());
-        List<PaperUserPapage> collect5 = collect4.stream().filter(f -> f.getFraction() <=80).collect(Collectors.toList());
+        List<PaperUserPapage> collect4 = collect.stream().filter(f -> f.getFraction() > 60).collect(Collectors.toList());
+        List<PaperUserPapage> collect5 = collect4.stream().filter(f -> f.getFraction() <= 80).collect(Collectors.toList());
         strings.add(String.valueOf(collect5.size()));
         //100
-        List<PaperUserPapage> collect6 = collect.stream().filter(f -> f.getFraction() >80).collect(Collectors.toList());
-        List<PaperUserPapage> collect7 = collect6.stream().filter(f -> f.getFraction() <=100).collect(Collectors.toList());
+        List<PaperUserPapage> collect6 = collect.stream().filter(f -> f.getFraction() > 80).collect(Collectors.toList());
+        List<PaperUserPapage> collect7 = collect6.stream().filter(f -> f.getFraction() <= 100).collect(Collectors.toList());
         strings.add(String.valueOf(collect7.size()));
         return strings;
+    }
+
+    @Override
+    public List<PaperUserQuery> queryClassList() {
+        List<PaperUserPapage> paperUserPapages = paperUserMapper.queryPage( new PaperUserQuery());
+        List<PaperUserPapage> collect = paperUserPapages.stream().filter(f -> f.getFraction() != null).collect(Collectors.toList());
+        List<PaperUserQuery> queries = new ArrayList<>();
+        collect.forEach(f -> {
+            queries.add(PaperUserQuery.builder()
+                    .classId(f.getClassId())
+                    .className(f.getClassName())
+                    .paperId(f.getPaperId())
+                    .paperName(f.getPaperName())
+                    .build())
+            ;
+        });
+        return queries;
     }
 
     @Override
@@ -181,7 +199,7 @@ public class PaperTestServiceImpl implements PaperTestService {
     }
 
     @Override
-    public List<AchievementExportVO> queryExport(){
+    public List<AchievementExportVO> queryExport() {
         return paperUserMapper.queryExport();
 
     }

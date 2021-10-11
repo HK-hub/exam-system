@@ -65,4 +65,16 @@
             #{titleId}
         </foreach>
     </select>
+
+
+    <select id="queryListByTitleIdE" resultType="cn.exam.domain.zj.ZjTitleInfo">
+        select  a.title_id  titleId, a.title_name  titleName, a.title_type titleType, a.title_fraction titleFraction , a.title_answer  titleAnswer, a.title_status titleStatus,
+        a.choice1 , a.choice2, a.choice3, a.choice4,
+        a.user_id userId, a.user_name userName, a.create_time createTime, b.subject_name subjectName
+        from zj_title_info a left join zj_subject_info b on a.subject_id = b.subject_id where
+        a.title_id IN
+        <foreach collection="titleIdList" open="(" separator="," close=")" item="titleId">
+            #{titleId}
+        </foreach>
+    </select>
 </mapper>

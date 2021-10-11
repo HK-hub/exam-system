@@ -16,4 +16,5 @@ public class PaperUserPapage {
     private String userName;
     private String className;
     private Integer paperScore;
+    private Integer classId;
 }

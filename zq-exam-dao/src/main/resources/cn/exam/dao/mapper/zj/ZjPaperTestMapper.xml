@@ -19,4 +19,8 @@
             #{id}
         </foreach>
     </select>
+    <select id="queryPaperTestByUserIdAndPaperId" resultType="cn.exam.domain.zj.ZjPaperTest">
+        SELECT id ,title_id titleId ,user_id userId ,user_name userName ,answer FROM zj_paper_test
+        where paper_id =#{paperId} and user_id=#{userId}
+    </select>
 </mapper>

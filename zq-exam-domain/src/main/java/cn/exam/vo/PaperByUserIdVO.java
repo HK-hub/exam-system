@@ -1,25 +1,19 @@
-package cn.exam.query;
-
+package cn.exam.vo;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-/**
- * @author YS
- * @version 1.0
- * @date 2021-03-30 13:19
- */
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class PaperUserQuery extends BaseQuery {
-    private String paperName;
+public class PaperByUserIdVO {
+    private Integer id;
     private String userName;
-    private String className;
+    private String paperName;
+    private Integer fraction;
+    private Integer paperScore;
     private Integer paperId;
-    private Integer classId;
-
 }

@@ -6,6 +6,7 @@ import cn.exam.dao.mapper.zj.ZjPaperTestMapper;
 import cn.exam.dao.mapper.zj.ZjSubjectUserLinkMapper;
 import cn.exam.dao.mapper.zj.ZjTitleInfoMapper;
 import cn.exam.domain.zj.*;
+import cn.exam.query.PaperByUserIdQuery;
 import cn.exam.query.PaperQuery;
 import cn.exam.query.TitlePageQuery;
 import cn.exam.service.ExaminationService;
@@ -93,6 +94,16 @@ public class ExaminationController extends BaseController {
         resultDTO.buildReturnCode(SystemCode.RET_CODE_SUCC, SystemCode.RET_MSG_SUCC);
         sendJsonSuccess(resultDTO, response);
     }
+    //考生查看考完的试卷
+    @RequestMapping("queryPaperCompleted.htm")
+    public void   queryPaperCompleted(Integer paperId,HttpServletResponse response) {
+        ResultDTO<PaperTestLevel> resultDTO = new ResultDTO<>();
+        UserVO user = userUtil.getUser();
+        resultDTO.setResult(examinationService.queryPaperCompleted(paperId,user.getUserId()));
+        resultDTO.buildReturnCode(SystemCode.RET_CODE_SUCC, SystemCode.RET_MSG_SUCC);
+        sendJsonSuccess(resultDTO, response);
+    }
+
     //组卷功能
     @RequestMapping("audioExam.htm")
     public void audioExam(ZjPaperInfo paperInfo,HttpServletResponse response){
@@ -109,6 +120,20 @@ public class ExaminationController extends BaseController {
         sendJsonSuccess(response);
     }
 
+    /**
+     * 学生已考试卷查询分页
+     */
+    @RequestMapping("queryPaperByUserId.htm")
+    public void queryPaperByUserId(PaperByUserIdQuery query, HttpServletResponse response){
+        ResultDTO<PageResult<List<PaperByUserIdVO>>> resultDTO = new ResultDTO<>();
+        UserVO user = userUtil.getUser();
+        query.setUserId(user.getUserId());
+        PageResult<List<PaperByUserIdVO>> listPageResult = examinationService.queryPaperByUserId(query);
+        resultDTO.setResult(listPageResult);
+        resultDTO.buildReturnCode(SystemCode.RET_CODE_SUCC, SystemCode.RET_MSG_SUCC);
+        sendJsonSuccessPage(resultDTO, response);
+
+    }
 
 
 

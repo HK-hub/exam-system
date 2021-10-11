@@ -34,7 +34,7 @@ public class ZjTitleInfo implements Serializable {
      * 难度系数
      */
     @Column(name ="title_type")
-    private Integer titleType;
+    private Double titleType;
     /**
      * 分数
      */

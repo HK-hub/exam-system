@@ -27,7 +27,9 @@ public interface ZjTitleInfoMapper
     //classId 查询试题
     List<ZjTitleInfo> queryTitleByClassId(@Param("classId") Integer classId,@Param("subjectId")Integer subjectId);
     //在一个难度区间
-    List<ZjTitleInfo> queryTitleByDifficulty(@Param("difficulty1") Integer difficulty1,@Param("difficulty2") Integer difficulty2,@Param("classId") Integer classId);
+    List<ZjTitleInfo> queryTitleByDifficulty(@Param("difficulty1") Double difficulty1,@Param("difficulty2") Double difficulty2,@Param("classId") Integer classId);
 
     List<ZjTitleInfo> queryListByTitleId(@Param("titleIdList") List<Integer> titleIdList);
+
+    List<ZjTitleInfo> queryListByTitleIdE(@Param("titleIdList") List<Integer> titleIdList);
 }

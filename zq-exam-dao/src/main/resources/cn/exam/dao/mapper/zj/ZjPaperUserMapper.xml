@@ -28,10 +28,17 @@
             <if test="paperName!=null and paperName!=''">
                 and b.paper_name =#{paperName}
             </if>
+            <if test="paperId!=null">
+                and b.paper_id =#{paperId}
+            </if>
+            <if test="classId!=null">
+                and d.class_id =#{classId}
+            </if>
+
         </where>
     </sql>
     <select id="queryPage" resultType="cn.exam.vo.PaperUserPapage" parameterType="cn.exam.query.PaperUserQuery">
-        SELECT a.paper_id , a.user_id ,a.fraction ,b.paper_name paperName, b.difficulty ,c.user_name userName,c.class_id,d.class_name className ,b.paper_score paperScore
+        SELECT a.paper_id paperId,d.class_id classId, a.user_id ,a.fraction ,b.paper_name paperName, b.difficulty ,c.user_name userName,c.class_id,d.class_name className ,b.paper_score paperScore
         FROM zj_paper_user a
         LEFT JOIN zj_paper_info b ON a.paper_id = b.paper_id
         LEFT JOIN zj_user_info c ON a.user_id = c.user_id
@@ -51,5 +58,12 @@
         LEFT JOIN zj_paper_info b ON a.paper_id = b.paper_id
         LEFT JOIN zj_user_info c ON a.user_id = c.user_id
         LEFT JOIN zj_class_info d ON c.class_id = d.class_id
+    </select>
+    <select id="queryPaperByUserId" resultType="cn.exam.vo.PaperByUserIdVO" parameterType="cn.exam.query.PaperByUserIdQuery">
+        SELECT a.fraction ,b.paper_name paperName,c.user_name userName,b.paper_score paperScore,a.id,b.paper_id paperId
+        FROM zj_paper_user a
+            LEFT JOIN zj_paper_info b ON a.paper_id = b.paper_id
+            LEFT JOIN zj_user_info c ON a.user_id = c.user_id
+        WHERE a.status =1 and a.user_id=#{userId}
     </select>
 </mapper>

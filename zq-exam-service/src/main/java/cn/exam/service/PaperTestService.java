@@ -27,7 +27,9 @@ public interface PaperTestService {
     void paperEnd(PaperSuccessSO successSO);
 
     PageResult<List<PaperUserPapage>> queryPaperUser(PaperUserQuery query);
-    List<String> queryAchievement();
+    List<String> queryAchievement(PaperUserQuery query);
+
+    List<PaperUserQuery> queryClassList();
 
     /**
      * 试卷导出

@@ -86,9 +86,9 @@ public class EasyExcelUtil {
     	excelWriter.write(datas, writeSheet);
 
         //千万别忘记finish 会帮忙关闭流
-        excelWriter.finish();
         outputStream.flush();
-    }
+		excelWriter.finish();
+	}
 
 
 	public static void writeSheelWeb(String fileName, final Class<?> clazz,List<?> datas,String sheelName,HttpServletResponse response) throws IOException {
