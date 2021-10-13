@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/zq-exam-base/zq-exam-base.iml" filepath="$PROJECT_DIR$/zq-exam-base/zq-exam-base.iml" />
+      <module fileurl="file://$PROJECT_DIR$/zq-exam-controller/zq-exam-controller.iml" filepath="$PROJECT_DIR$/zq-exam-controller/zq-exam-controller.iml" />
+      <module fileurl="file://$PROJECT_DIR$/zq-exam-dao/zq-exam-dao.iml" filepath="$PROJECT_DIR$/zq-exam-dao/zq-exam-dao.iml" />
+      <module fileurl="file://$PROJECT_DIR$/zq-exam-domain/zq-exam-domain.iml" filepath="$PROJECT_DIR$/zq-exam-domain/zq-exam-domain.iml" />
+      <module fileurl="file://$PROJECT_DIR$/zq-exam-parent.iml" filepath="$PROJECT_DIR$/zq-exam-parent.iml" />
+      <module fileurl="file://$PROJECT_DIR$/zq-exam-service/zq-exam-service.iml" filepath="$PROJECT_DIR$/zq-exam-service/zq-exam-service.iml" />
+    </modules>
+  </component>
+</project>

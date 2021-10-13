@@ -34,7 +34,7 @@ public class ExcelListener<T> extends AnalysisEventListener<T> {
 
 	@Override
 	public void doAfterAllAnalysed(AnalysisContext context) {
-		log.info("{}条数据，解析完成", datas.size());
+		//log.info("{}条数据，解析完成", datas.size());
 	}
 
 	public List<T> getDatas() {

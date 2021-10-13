@@ -1,4 +1,4 @@
-package cn.zq.exam.so;
+package cn.exam.so;
 
 import lombok.Data;
 

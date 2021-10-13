@@ -40,7 +40,7 @@ public class RedisUtil {
             redisTemplate.opsForValue().set(key, value);
             return true;
         } catch (Exception e) {
-            log.debug("redis异常"+e);
+            //log.debug("redis异常"+e);
             return false;
         }
     }
@@ -54,7 +54,7 @@ public class RedisUtil {
             redisTemplate.opsForValue().set(key, value, time, TimeUnit.SECONDS);
             return true;
         } catch (Exception e) {
-            log.debug("redis异常"+e);
+            //log.debug("redis异常"+e);
             return false;
         }
     }
@@ -65,7 +65,7 @@ public class RedisUtil {
             redisTemplate.delete(key);
             return true;
         }catch (Exception e){
-            log.debug("redis异常"+e);
+            //log.debug("redis异常"+e);
             return false;
         }
 

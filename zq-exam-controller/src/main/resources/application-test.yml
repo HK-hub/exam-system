@@ -13,7 +13,7 @@ spring:
         url:
         username:
         password:
-        driverClass: com.mysql.jdbc.Driver
+        driverClass: com.mysql.cj.jdbc.Driver
         platform: mysql
         type: com.alibaba.druid.pool.DruidDataSource
 

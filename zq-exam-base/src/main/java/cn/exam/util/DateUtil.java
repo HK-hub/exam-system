@@ -77,7 +77,7 @@ public class DateUtil {
 		try {
 			return new SimpleDateFormat(format).parse(date);
 		} catch (ParseException e) {
-			log.error("获取某格式的时间异常", e);
+			//log.error("获取某格式的时间异常", e);
 		}
 		return null;
 	}
@@ -210,7 +210,7 @@ public class DateUtil {
 			calendar.add(Calendar.DAY_OF_MONTH, num);
 			return getDateToString(calendar.getTime(), format);
 		} catch (ParseException e) {
-			log.error("获取某格式的时间异常", e);
+			//log.error("获取某格式的时间异常", e);
 		}
 		return null;
 	}
@@ -255,7 +255,7 @@ public class DateUtil {
 			calendar.setTime(new SimpleDateFormat(Y_M_D).parse(date));
 			return getDateToString(calendar.getTime(), format);
 		} catch (ParseException e) {
-			log.error("获取某格式的时间异常", e);
+			//log.error("获取某格式的时间异常", e);
 		}
 		return null;
 	}
@@ -331,7 +331,7 @@ public class DateUtil {
 			calendar.setTime(new SimpleDateFormat(Y_M_D).parse(date));
 			return getDateToString(calendar.getTime(), format);
 		} catch (ParseException e) {
-			log.error("获取某格式的时间异常", e);
+			//log.error("获取某格式的时间异常", e);
 		}
 		return null;
 	}
